@@ -1,4 +1,4 @@
-package com.igrowker.altour.api.externalDtos;
+package com.igrowker.altour.api.externalDtos.hereMaps.destinyDetails;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

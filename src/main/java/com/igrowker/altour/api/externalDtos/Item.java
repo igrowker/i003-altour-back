@@ -1,5 +1,7 @@
 package com.igrowker.altour.api.externalDtos;
 
+import com.igrowker.altour.api.externalDtos.hereMaps.destinyDetails.Address;
+import com.igrowker.altour.api.externalDtos.hereMaps.destinyDetails.Contact;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

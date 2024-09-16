@@ -1,5 +1,6 @@
-package com.igrowker.altour.api.externalDtos;
+package com.igrowker.altour.api.externalDtos.hereMaps;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +12,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Contact {
-    private List<PhoneValues> phone;
-    private List<WwwValues> www;
+public class Shape {
+    @JsonProperty("links")
+    private List<Link> links;
 }
+
+
+
