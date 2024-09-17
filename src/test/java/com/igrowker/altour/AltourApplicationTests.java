@@ -1,10 +1,10 @@
-package com.igrowker.miniproject;
+package com.igrowker.altour;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MiniProjectApplicationTests {
+class AltourApplicationTests {
 
 	@Test
 	void contextLoads() {
