@@ -80,7 +80,7 @@ public class HeatMapService {
 						heatMapPoints.add(heatPoint);
 					}
 				}
-
+			// todo aca deberiamos buscar una forma mas eficiente de recorrer.. y podriamos limitar la cantidad de punto que devuelva  basandonos en un valor de diferencia entre puntos, osea si la diferencia en distancia entre puntos A y B es menor a X mts, se deberia evitar mostrar dicho punto
 			}
 		}
 		return heatMapPoints;
