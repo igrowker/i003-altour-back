@@ -1,7 +1,7 @@
 package com.igrowker.altour.controller;
 
-import com.igrowker.altour.api.externalDtos.User.registerUserDTO;
-import com.igrowker.altour.api.externalDtos.User.loginUserDTO;
+import com.igrowker.altour.api.externalDtos.User.UserDTO;
+import com.igrowker.altour.api.externalDtos.User.LoginUserDTO;
 import com.igrowker.altour.persistence.entity.CustomUser;
 import com.igrowker.altour.service.UserServiceImplementation;
 import io.jsonwebtoken.Jwts;
@@ -31,7 +31,7 @@ public class AuthenticationController {
     private UserServiceImplementation userServiceImplementation;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody loginUserDTO loginUserDTO) {
+    public ResponseEntity<?> login(@RequestBody LoginUserDTO loginUserDTO) {
 
         if (loginUserDTO == null || loginUserDTO.getEmail() == null || loginUserDTO.getEmail().isEmpty() ||
                 loginUserDTO.getPassword() == null || loginUserDTO.getPassword().isEmpty()) {
@@ -58,7 +58,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody registerUserDTO user) {
+    public ResponseEntity<?> register(@RequestBody UserDTO user) {
 
         if (user == null || user.getEmail() == null || user.getEmail().isEmpty() ||
                 user.getPassword() == null || user.getPassword().isEmpty()) {
@@ -79,7 +79,7 @@ public class AuthenticationController {
         newUser.setActivity(user.getActivity());
         newUser.setMaxDistance(user.getMaxDistance());
         newUser.setUsername(user.getUsername());
-        
+
         userServiceImplementation.saveUser(newUser);
 
         return new ResponseEntity<>("User created", HttpStatus.CREATED);
