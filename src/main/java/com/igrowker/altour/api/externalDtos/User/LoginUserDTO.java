@@ -1,14 +1,14 @@
 package com.igrowker.altour.api.externalDtos.User;
 
-public class loginUserDTO {
+public class LoginUserDTO {
 
     private String email;
     private String password;
 
-    public loginUserDTO() {
+    public LoginUserDTO() {
     }
 
-    public loginUserDTO(String email, String password) {
+    public LoginUserDTO(String email, String password) {
         this.email = email;
         this.password = password;
     }

@@ -1,9 +1,11 @@
 package com.igrowker.altour.api.externalDtos.User;
 
 
+import com.igrowker.altour.persistence.entity.CustomUser;
+
 import java.math.BigDecimal;
 
-public class registerUserDTO {
+public class UserDTO {
     private Long id;
 
     private String username;
@@ -62,5 +64,16 @@ public class registerUserDTO {
 
     public void setMaxDistance(BigDecimal maxDistance) {
         this.maxDistance = maxDistance;
+    }
+
+    public CustomUser toEntity() {
+        CustomUser user = new CustomUser();
+        user.setId(this.id);
+        user.setUsername(this.username);
+        user.setEmail(this.email);
+        user.setPassword(this.password);
+        user.setActivity(this.activity);
+        user.setMaxDistance(this.maxDistance);
+        return user;
     }
 }
