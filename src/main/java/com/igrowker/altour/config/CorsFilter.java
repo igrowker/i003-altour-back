@@ -22,7 +22,7 @@ public class CorsFilter implements Filter {
     HttpServletResponse res = (HttpServletResponse) servletResponse;
     HttpServletRequest req = (HttpServletRequest) servletRequest;
 
-    res.setHeader("Access-Control-Allow-Origin", "http://0.0.0.0:8080");
+    res.setHeader("Access-Control-Allow-Origin", "http://0.0.0.0:8080"); // todo agregar url front!
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS, PATCH");
     res.setHeader("Access-Control-Allow-Headers", "authorization, Content-Type, Accept, x-auth-token, Location, customerId, link, Refresh-Token");

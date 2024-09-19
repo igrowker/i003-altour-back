@@ -2,6 +2,8 @@ package com.igrowker.altour.api.externalDtos.User;
 
 
 import com.igrowker.altour.persistence.entity.CustomUser;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
@@ -14,7 +16,7 @@ public class UserDTO {
 
     private String password;
 
-    private String activity;
+    private String activity; // TODO VERIFICAR SI ENUM CON LISTA DE ACT O STRING
 
     private BigDecimal maxDistance;
 

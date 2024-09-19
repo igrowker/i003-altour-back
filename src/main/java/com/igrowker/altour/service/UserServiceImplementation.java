@@ -3,6 +3,8 @@ package com.igrowker.altour.service;
 import com.igrowker.altour.persistence.entity.CustomUser;
 import com.igrowker.altour.persistence.repository.ICustomUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,8 @@ public class UserServiceImplementation implements IUserService {
     @Override
     public CustomUser getUser(String email) {
         CustomUser user = userRepository.findByEmail(email);
+        // todo usualmente esta logica de retornar error de notFound yo la suelo delegar al service directamente, porque asi evitamos tener que hacer el if en cada controller que pueda no encontrar al user
+
         return user;
     }
 
