@@ -3,7 +3,7 @@ package com.igrowker.altour.controller;
 
 import java.util.List;
 
-import com.igrowker.altour.api.externalDtos.Item;
+import com.igrowker.altour.dtos.external.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,7 @@ import com.igrowker.altour.service.DestinationFilterService;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(value = "destinos/")
 public class DestinationFilterController {
 
 	@Autowired
@@ -24,7 +24,7 @@ public class DestinationFilterController {
 	@Value("${here_maps.api.key}")
 	private String hereMapsApiKey;
 
-	@GetMapping("/destinos/filtrar")
+	@GetMapping("filtrar")
 	public Mono<List<Item>> filter(@RequestParam Double lat,
 								   @RequestParam Double lng,
 								   @RequestParam Integer rad,
