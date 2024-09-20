@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.igrowker.altour.api.externalDtos.Item;
-import com.igrowker.altour.api.externalDtos.Items;
+import com.igrowker.altour.dtos.external.Item;
+import com.igrowker.altour.dtos.external.Items;
 
 import reactor.core.publisher.Mono;
 

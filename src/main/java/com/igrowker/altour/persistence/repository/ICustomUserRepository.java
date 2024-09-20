@@ -4,7 +4,11 @@ import com.igrowker.altour.persistence.entity.CustomUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ICustomUserRepository extends JpaRepository<CustomUser, Long> {
-    CustomUser findByEmail(String email);
+    Optional<CustomUser> findByEmail(String email);
+
+    boolean existsByEmail(String email);
 }
