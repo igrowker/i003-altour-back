@@ -17,7 +17,7 @@ import com.igrowker.altour.service.HeatMapService;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping(value = "")
+@RequestMapping(value = "") // TODO definir si usaremos endpoints en españo como suguiere igrowker o endpoints en ingles
 public class HeatMapController {
 	
  /* Devuelve datos en tiempo real sobre la
