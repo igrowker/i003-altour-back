@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.igrowker.altour.api.externalDtos.BORRAR.Item;
-import com.igrowker.altour.api.externalDtos.BORRAR.Items;
+import com.igrowker.altour.dtos.external.Item;
+import com.igrowker.altour.dtos.external.Items;
 import com.igrowker.altour.dtos.external.bestTimeApi.Venue;
 import com.igrowker.altour.dtos.external.bestTimeApi.VenuesResponse;
 import com.igrowker.altour.dtos.external.bestTimeApiId.VenueInfo;
@@ -16,6 +16,7 @@ import com.igrowker.altour.dtos.external.bestTimeApiId.VenueResponse;
 
 import reactor.core.publisher.Mono;
 
+// works with BEST TIME API
 @Service
 public class DestinationFilterServiceImpl implements IDestinationFilterService {
 

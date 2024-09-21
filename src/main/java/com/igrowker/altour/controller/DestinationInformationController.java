@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.igrowker.altour.api.externalDtos.BORRAR.Item;
+import com.igrowker.altour.dtos.external.Item;
 import com.igrowker.altour.service.DestinationInformationServiceImpl;
 
 import reactor.core.publisher.Mono;

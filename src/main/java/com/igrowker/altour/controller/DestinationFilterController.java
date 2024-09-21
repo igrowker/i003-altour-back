@@ -3,7 +3,7 @@ package com.igrowker.altour.controller;
 
 import java.util.List;
 
-import com.igrowker.altour.api.externalDtos.BORRAR.Item;
+import com.igrowker.altour.dtos.external.Item;
 import com.igrowker.altour.dtos.external.bestTimeApi.Venue;
 import com.igrowker.altour.dtos.external.bestTimeApiId.VenueResponse;
 import com.igrowker.altour.persistence.repository.ICustomUserRepository;
