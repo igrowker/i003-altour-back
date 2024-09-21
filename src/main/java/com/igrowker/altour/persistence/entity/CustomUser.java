@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
+
 
 @Builder
 @Data
@@ -20,22 +23,34 @@ public class CustomUser implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false , unique = true)
+	@Column(nullable = false, unique = true)
 	private String username; // todo yo lo eliminaria, porque personalmente no me gusta, pero como decidan
 
-	@Column(nullable = false , unique = true)
+	@Column(nullable = false, unique = true)
 	private String email;
 
 	@Column(nullable = false)
 	private String password;
 
-	@Column(nullable = false)
-	private String activity;
+	// Distancia máxima de búsqueda
+	@Column(name = "max_search_distance", nullable = false)
+	private Integer maxSearchDistance;
 
-	@Column(nullable = false)
-	private BigDecimal maxDistance;
+	// Nivel de afluencia preferido
+	@Column(name = "preferred_crowd_level", nullable = false)
+	private Integer preferredCrowdLevel;
 
-	// todo aca agregaria la lista de favoritos, con los id de los destinos favoritos. De la misma manera, se podria crear un lsitado de los visitados y de ahi se obtendria una recomendacion mas personalizada
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Builder.Default
+	private Set<UserPreference> preferences = new HashSet<>();
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Builder.Default
+	private Set<UserFavorite> favorites = new HashSet<>();
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Builder.Default
+	private Set<UserVisitedDestination> visitedDestinations = new HashSet<>();
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

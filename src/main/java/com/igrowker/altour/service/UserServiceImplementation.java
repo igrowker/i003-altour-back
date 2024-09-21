@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 @Service
@@ -51,8 +52,11 @@ public class UserServiceImplementation implements IUserService {
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .password(passwordEncoder.encode(user.getPassword()))
-                .activity(user.getActivity())
-                .maxDistance(user.getMaxDistance())
+                .favorites(new HashSet<>())
+                .maxSearchDistance(1000) // todo valor por defecto, front que lo modifique en un update
+                .preferences(new HashSet<>())
+                .preferredCrowdLevel(1) // todo verificar que rango de valores toma esto!!
+                .visitedDestinations(new HashSet<>())
                 .build();
         userRepository.save(newUser);
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));

@@ -2,14 +2,21 @@ package com.igrowker.altour.dtos.internal.User;
 
 
 import com.igrowker.altour.persistence.entity.CustomUser;
+import com.igrowker.altour.persistence.entity.UserFavorite;
+import com.igrowker.altour.persistence.entity.UserPreference;
+import com.igrowker.altour.persistence.entity.UserVisitedDestination;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,9 +30,16 @@ public class UserDTO {
 
     private String password;
 
-    private String activity; // TODO VERIFICAR SI ENUM CON LISTA DE ACT O STRING
+    private Integer maxSearchDistance;
 
-    private BigDecimal maxDistance;
+    // Nivel de afluencia preferido
+    private Integer preferredCrowdLevel;
+
+    private Set<UserPreference> preferences = new HashSet<>();
+
+    private Set<UserFavorite> favorites = new HashSet<>();
+
+    private Set<UserVisitedDestination> visitedDestinations = new HashSet<>();
 
     public CustomUser toEntity() {
         CustomUser user = new CustomUser();
@@ -33,8 +47,12 @@ public class UserDTO {
         user.setUsername(this.username);
         user.setEmail(this.email);
         user.setPassword(this.password);
-        user.setActivity(this.activity);
-        user.setMaxDistance(this.maxDistance);
+        user.setMaxSearchDistance(this.maxSearchDistance);
+        user.setPreferredCrowdLevel(this.preferredCrowdLevel);
+        user.setPreferences(this.preferences);
+        user.setFavorites(this.favorites);
+        user.setVisitedDestinations(this.visitedDestinations);
+
         return user;
     }
 }

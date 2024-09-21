@@ -1,11 +1,10 @@
 package com.igrowker.altour.controller;
 
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "")
+@RequestMapping(value = "") // TODO definir si usaremos endpoints en españo como suguiere igrowker o endpoints en ingles
 public class RecommendationsController {
 
 	/*

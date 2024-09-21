@@ -1,9 +1,7 @@
 package com.igrowker.altour.controller;
 
 import com.igrowker.altour.dtos.internal.User.RegistserUserDT0;
-import com.igrowker.altour.dtos.internal.User.UserDTO;
 import com.igrowker.altour.dtos.internal.User.LoginUserDTO;
-import com.igrowker.altour.persistence.entity.CustomUser;
 import com.igrowker.altour.service.UserServiceImplementation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

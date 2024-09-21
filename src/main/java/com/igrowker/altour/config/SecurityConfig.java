@@ -2,7 +2,6 @@ package com.igrowker.altour.config;
 
 
 import com.igrowker.altour.service.CustomUserDetailsServiceImpl;
-import com.igrowker.altour.service.IUserService;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
