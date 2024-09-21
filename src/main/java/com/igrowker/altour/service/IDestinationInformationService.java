@@ -1,6 +1,6 @@
 package com.igrowker.altour.service;
 
-import com.igrowker.altour.api.externalDtos.BORRAR.Item;
+import com.igrowker.altour.dtos.external.Item;
 
 import reactor.core.publisher.Mono;
 

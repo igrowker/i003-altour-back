@@ -4,10 +4,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.igrowker.altour.api.externalDtos.BORRAR.Item;
+import com.igrowker.altour.dtos.external.Item;
 
 import reactor.core.publisher.Mono;
 
+// works with HERE MAPS API
 @Service
 public class DestinationInformationServiceImpl implements IDestinationInformationService{
 

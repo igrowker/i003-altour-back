@@ -1,7 +1,7 @@
 package com.igrowker.altour.service;
 
 import java.util.List;
-import com.igrowker.altour.api.externalDtos.BORRAR.Item;
+import com.igrowker.altour.dtos.external.Item;
 import com.igrowker.altour.dtos.external.bestTimeApi.Venue;
 import com.igrowker.altour.dtos.external.bestTimeApiId.VenueResponse;
 

@@ -11,6 +11,7 @@ import com.igrowker.altour.dtos.external.Items;
 
 import reactor.core.publisher.Mono;
 
+// works with HERE MAP API
 @Service
 public class DestinationFilterService {
 
