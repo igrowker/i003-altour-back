@@ -50,8 +50,10 @@ public class DestinationFilterController {
 	}
 
 	@GetMapping("/destines/preferences/filter-besttime")
-	public Mono<List<Venue>> filterBestTime(@RequestParam Double lat, @RequestParam Double lng,
-			@RequestParam String username, @RequestParam String preference) {
+	public Mono<List<Venue>> filterBestTime(@RequestParam Double lat,
+											@RequestParam Double lng,
+											@RequestParam String username,
+											@RequestParam String preference) {
 
 		return Mono.justOrEmpty(customUserRepository.findByUsername(username)).flatMap(user -> {
 

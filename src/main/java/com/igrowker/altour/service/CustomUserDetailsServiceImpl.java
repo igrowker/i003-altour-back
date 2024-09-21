@@ -15,6 +15,7 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username).orElseThrow(()-> new RuntimeException("Bad credentials")); // todo CAMBIAR MANEJO EXEPCIONES PERSONALIZADAS
+        return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("No se encontro el usuario " + username));
+
     }
 }

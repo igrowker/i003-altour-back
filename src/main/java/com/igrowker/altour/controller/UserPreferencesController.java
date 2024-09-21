@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.igrowker.altour.service.IUserPreferenceService;
 
 @RestController
-@RequestMapping("/api/v1/preferences")
+@RequestMapping("preferences")
 public class UserPreferencesController {
 	
 	//Para añadir preferences quizás que el user las añada tipo etiquetas manualmente con sus nombres y se muestren de esa manera o crear una lista con 
