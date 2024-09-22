@@ -1,24 +1,25 @@
 package com.igrowker.altour.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import com.igrowker.altour.service.ICustomUserService;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1")
-public class UserSettingsController {
+@RequestMapping("borrar/users/")
+public class BORRARUserSettingsController {
+	// todo deberiamos modificar los campos crowdLevel y maxDistance en el UserController, en el metodo PUT!
+	// todo deberiamos modificar los campos crowdLevel y maxDistance en el UserController, en el metodo PUT!
+	// todo deberiamos modificar los campos crowdLevel y maxDistance en el UserController, en el metodo PUT!
+	// todo deberiamos modificar los campos crowdLevel y maxDistance en el UserController, en el metodo PUT!
+	// todo deberiamos modificar los campos crowdLevel y maxDistance en el UserController, en el metodo PUT!
+
+	/*
 	
 	//Creo los endpoints separados de Preferences para que se pueda modificar estas settings de manera independiente a las preferencias de lugares concretos
 
 	@Autowired
 	private ICustomUserService customUserService;
 
-	@PostMapping("/set/maxDistance")
+
+	@PutMapping("maxDistance")
 	public ResponseEntity<String> setMaxDistance(@RequestParam String username, @RequestParam Integer maxDistance) {
 
 		try {
@@ -30,7 +31,7 @@ public class UserSettingsController {
 		}
 	}
 
-	@PostMapping("/set/crowdLevel")
+	@PutMapping("crowdLevel")
 	public ResponseEntity<String> setCrowdLevel(@RequestParam String username, @RequestParam Integer crowdLevel) {
 
 		try {
@@ -41,4 +42,6 @@ public class UserSettingsController {
 					.body("Error setting crowd level: " + e.getMessage());
 		}
 	}
+
+	 */
 }

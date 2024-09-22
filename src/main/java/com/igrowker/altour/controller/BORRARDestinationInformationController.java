@@ -1,23 +1,15 @@
 package com.igrowker.altour.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.igrowker.altour.dtos.external.Item;
-import com.igrowker.altour.service.DestinationInformationServiceImpl;
-
-import reactor.core.publisher.Mono;
-
 @RestController
-@RequestMapping(value = "") // TODO definir si usaremos endpoints en españo como suguiere igrowker o endpoints en ingles
-public class DestinationInformationController {
+@RequestMapping("borrar") // TODO definir si usaremos endpoints en españo como suguiere igrowker o endpoints en ingles
+public class BORRARDestinationInformationController {
+/*
 
-	/*
 	 * Devuelve información detallada de un punto de interés turístico específico
-	 */
+
 	@Autowired
 	private DestinationInformationServiceImpl destinationInformationService;
 
@@ -26,4 +18,5 @@ public class DestinationInformationController {
 		return destinationInformationService.getDetailedDestinationInfo(placeId);
 	}
 
+*/
 }

@@ -50,6 +50,7 @@ public class JWTUtils {
         try{
             return claimsTFunction.apply(Jwts.parser().verifyWith((SecretKey) getKey()).build().parseSignedClaims(token).getPayload());
         } catch (Exception e){
+            // TODO VERIFICAR COMO MANEJAR EXEPCION, PORQUE NO ESTA FUNCIONANDO COMO ENTIENDO QUE DEBERIA.. CREERIA QUE CUANDO SALTA LA EXC EN UN FILTRO NO TENDRA EL MISMO TRATAMIENTO? AVERIGUAR!
             throw new ForbiddenException("INVALID JWT: "+e.getMessage());
         }
     }

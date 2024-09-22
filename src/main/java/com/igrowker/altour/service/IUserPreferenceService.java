@@ -4,9 +4,9 @@ import java.util.Set;
 
 public interface IUserPreferenceService {
 
-	void addPreference(String username, String newPreference);
+	String addPreference(String email, String newPreference);
 
-	void removePreference(String username, String preferenceToRemove);
+	String removePreference(String email, String preferenceToRemove);
 
-	Set<String> getPreferences(String username);
+	Set<String> getPreferencesByEmail(String email);
 }

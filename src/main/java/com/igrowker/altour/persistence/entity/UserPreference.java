@@ -25,8 +25,9 @@ public class UserPreference {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	// TODO aca esto deberia comentarse y que la preferencia no sepa que usuarios tiene relacionados.. pero implica cambiar la logica de busqueda en repository.. hablarlo con chicos, ya que puede modificarse la logica
 	@ManyToOne
-	@JoinColumn(name = "user_id", nullable = false)
+	// @JoinColumn(name = "user_id", nullable = false)
 	private CustomUser user;
 
 	@Column(nullable = false)

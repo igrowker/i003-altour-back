@@ -20,7 +20,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Service
-public class HeatMapService {
+public class BORRARHeatMapService {
 	private final RestTemplate restTemplate;
 
 	private final WebClient webClient;
@@ -30,7 +30,7 @@ public class HeatMapService {
 	@Value("${here_maps.api.key}")
 	private String hereMapsApiKey;
 
-	public HeatMapService(RestTemplate restTemplate, WebClient.Builder webClientBuilder) {
+	public BORRARHeatMapService(RestTemplate restTemplate, WebClient.Builder webClientBuilder) {
         this.restTemplate = restTemplate;
         this.webClient = webClientBuilder.baseUrl(hereMapsBaseUrl).build();
 	}

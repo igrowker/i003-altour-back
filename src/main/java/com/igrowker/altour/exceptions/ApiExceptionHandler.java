@@ -17,7 +17,6 @@ public class ApiExceptionHandler {
     @ExceptionHandler({ForbiddenException.class})
     @ResponseBody
     public ErrorMessage forbiddenRequest(HttpServletRequest request, Exception exception) {
-        System.out.println("ESTPY PASANDO POR ForbiddenException");
         return new ErrorMessage(exception, request.getRequestURI());
     }
     @ResponseStatus(HttpStatus.NOT_FOUND)

@@ -36,29 +36,46 @@ public class CustomUser implements UserDetails {
 	@Column(name = "max_search_distance", nullable = false)
 	private Integer maxSearchDistance;
 
-	// Nivel de afluencia preferido
-	@Column(name = "preferred_crowd_level", nullable = false)
-	private Integer preferredCrowdLevel;
-
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	@Builder.Default
 	private Set<UserPreference> preferences = new HashSet<>();
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Column(name = "preferred_crowd_level", nullable = false)
+	private Integer preferredCrowdLevel; // TODO que escala de valores usaremos para esto? Nivel de afluencia preferido
+
+
+	@Override
+	public String getUsername() {
+		return email;
+	}
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return null;
+	}
+	@Override
+	public String getPassword() {
+		return password;
+	}
+
+
+
+// todo metodos a verificar
+// todo metodos a verificar
+// todo metodos a verificar
+// todo metodos a verificar
+
+//todo un usuario tiene muchos favoritos, y un favorito puede estar relacionado a muchos usuarios, sin embargo, el favorito no conoce al usuario, por lo que el id del destino se tiene que meter en una lista de destinos favoritos en el user, como fk.. Aplicaria lo mismo para visitados.. CHARLAR
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	@Builder.Default
 	private Set<UserFavorite> favorites = new HashSet<>();
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Builder.Default
 	private Set<UserVisitedDestination> visitedDestinations = new HashSet<>();
+// todo metodos a verificar
+// todo metodos a verificar
+// todo metodos a verificar
+// todo metodos a verificar
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of();
-	}
 
-	@Override
-	public String getUsername() {
-		return email;
-	}
 }

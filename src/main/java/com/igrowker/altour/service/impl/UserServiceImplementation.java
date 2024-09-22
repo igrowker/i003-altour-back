@@ -1,13 +1,13 @@
-package com.igrowker.altour.service;
+package com.igrowker.altour.service.impl;
 
 import com.igrowker.altour.dtos.internal.User.LoginUserDTO;
 import com.igrowker.altour.dtos.internal.User.RegistserUserDT0;
 import com.igrowker.altour.dtos.internal.User.UserDTO;
 import com.igrowker.altour.persistence.entity.CustomUser;
 import com.igrowker.altour.persistence.repository.ICustomUserRepository;
+import com.igrowker.altour.service.IUserService;
 import com.igrowker.altour.utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -45,9 +45,6 @@ public class UserServiceImplementation implements IUserService {
         CustomUser dbUser = getUser(loginUserDTO.getEmail());
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUserDTO.getEmail(), loginUserDTO.getPassword()));
         // todo: authenticationManager.authenticate(UsernamePasswordAuthenticationToken.class) es el metodo que se encarga de pedir un objeto con las credenciales y pasarlo al authentication provider correcto, El authentication provider (seteado en el archivo SecurityConfig mediante el metodo authenticationProvider()), se encarga de llamar al CustomUserDetailsServiceImpl para que este busque los detalles del user con metodo loadUserByUsername() busca al user en la bd o desde otra api de terceros. Permitiendo configurar multiples formas de authenticacion. Y si fue correcto se crea un objeto Authentication (con los datos del user) que se guarda en el SecurityContextHolder. Sino se lanza excepción BadCredentials y no retornara token
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        securityContext.getAuthentication().getPrincipal();
-        // System.out.println("LOGUED USER =================== >> > >  "+logguedUser.getEmail());
         return jwtUtils.generateToken(dbUser);
     }
 

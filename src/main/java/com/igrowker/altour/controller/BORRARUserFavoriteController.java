@@ -17,13 +17,13 @@ import com.igrowker.altour.persistence.entity.UserFavorite;
 import com.igrowker.altour.service.IUserFavoriteService;
 
 @RestController
-@RequestMapping("/api/v1")
-public class UserFavoriteController {
+@RequestMapping("borrar/users/favorites/")
+public class BORRARUserFavoriteController {
 
 	@Autowired
 	private IUserFavoriteService favoriteService;
 
-	@PostMapping("/destines/addfavorite")
+	@PostMapping()
 	public ResponseEntity<String> addFavorite(@RequestParam String username, @RequestParam Long venueId) {
 		try {
 			favoriteService.addFavorite(username, venueId);
@@ -33,7 +33,7 @@ public class UserFavoriteController {
 		}
 	}
 
-	@GetMapping("/destines/listfavorites")
+	@GetMapping()
 	public ResponseEntity<List<UserFavorite>> getFavorites(@RequestBody String username) {
 		try {
 			List<UserFavorite> favorites = favoriteService.getFavoritesByUsername(username);

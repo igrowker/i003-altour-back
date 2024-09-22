@@ -1,9 +1,7 @@
 package com.igrowker.altour.config;
 
-import com.igrowker.altour.exceptions.ForbiddenException;
-import com.igrowker.altour.service.CustomUserDetailsServiceImpl;
+import com.igrowker.altour.service.impl.CustomUserDetailsServiceImpl;
 import com.igrowker.altour.utils.JWTUtils;
-import io.jsonwebtoken.*;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

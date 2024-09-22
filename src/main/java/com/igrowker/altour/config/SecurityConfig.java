@@ -1,7 +1,7 @@
 package com.igrowker.altour.config;
 
 
-import com.igrowker.altour.service.CustomUserDetailsServiceImpl;
+import com.igrowker.altour.service.impl.CustomUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

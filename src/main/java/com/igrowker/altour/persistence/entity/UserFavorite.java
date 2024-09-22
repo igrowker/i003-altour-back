@@ -24,6 +24,7 @@ public class UserFavorite {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	// todo un usuario tiene muchos favoritos, y un favorito puede estar relacionado a muchos usuarios, sin embargo, el favorito no conoce al usuario, por lo que el id del destino se tiene que meter en una lista de destinos favoritos en el user, como fk
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	private CustomUser user;
@@ -31,5 +32,4 @@ public class UserFavorite {
 	@Column(name = "destination_id", nullable = false)
 	private Long destinationId;
 
-	// Getters and setters
 }
