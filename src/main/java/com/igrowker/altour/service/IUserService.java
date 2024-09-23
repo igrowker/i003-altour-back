@@ -1,8 +1,8 @@
 package com.igrowker.altour.service;
 
 import com.igrowker.altour.dtos.internal.User.LoginUserDTO;
-import com.igrowker.altour.dtos.internal.User.RegistserUserDT0;
-import com.igrowker.altour.dtos.internal.User.UserDTO;
+import com.igrowker.altour.dtos.internal.User.RegisterUserDT0;
+import com.igrowker.altour.dtos.internal.User.UserReadDTO;
 import com.igrowker.altour.persistence.entity.CustomUser;
 import com.igrowker.altour.persistence.entity.Place;
 import com.igrowker.altour.persistence.entity.VenueType;
@@ -11,11 +11,12 @@ import java.util.Set;
 
 public interface IUserService {
 
+    UserReadDTO findUserById(Long id);
     CustomUser getUserByEmail(String email);
     CustomUser getUserById(Long id);
 
     // USER CONFIG PERFIL
-    CustomUser updateUser(UserDTO user);
+    UserReadDTO updateUser(Long userId, UserReadDTO user);
     String deleteUser(String email);
 
     // USERS- PLACES
@@ -26,7 +27,7 @@ public interface IUserService {
     // SECURITY
     String login (LoginUserDTO loginUserDTO);
     void validateNewEmail(String email);
-    String register (RegistserUserDT0 user);
+    String register (RegisterUserDT0 user);
 
     // PREFERENCES
     Set<VenueType> getPreferencesByEmail (String preference);

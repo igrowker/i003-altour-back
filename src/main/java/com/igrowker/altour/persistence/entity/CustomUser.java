@@ -59,27 +59,16 @@ public class CustomUser implements UserDetails {
 		return password;
 	}
 
-
-/*
-
-//todo un usuario tiene muchos favoritos, y un favorito puede estar relacionado a muchos usuarios, sin embargo, el favorito no conoce al usuario, por lo que el id del destino se tiene que meter en una lista de destinos favoritos en el user, como fk.. Aplicaria lo mismo para visitados.. CHARLAR
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-	@Builder.Default
-	private Set<UserFavorite> favorites = new HashSet<>();
-
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	@Builder.Default
-	private Set<UserVisitedDestination> visitedDestinations = new HashSet<>();
-// todo metodos a verificar
- */
-
+	// TODO VER FORMAS DE TENER SOLO UNA LISTA Y UN ESTADO, TIPO VISITADOS, PENDIENTES FAVORITOS ECTS..
+	// TODO VER FORMAS DE TENER SOLO UNA LISTA Y UN ESTADO, TIPO VISITADOS, PENDIENTES FAVORITOS ECTS..
+	// TODO VER FORMAS DE TENER SOLO UNA LISTA Y UN ESTADO, TIPO VISITADOS, PENDIENTES FAVORITOS ECTS..
+	// TODO VER FORMAS DE TENER SOLO UNA LISTA Y UN ESTADO, TIPO VISITADOS, PENDIENTES FAVORITOS ECTS..
+	// TODO VER FORMAS DE TENER SOLO UNA LISTA Y UN ESTADO, TIPO VISITADOS, PENDIENTES FAVORITOS ECTS..
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "user_places",
 			joinColumns = @JoinColumn(name = "user_id"),
-			inverseJoinColumns = @JoinColumn(name = "place_id"))
+			inverseJoinColumns = @JoinColumn(name = "place_id")
+			/* columnDefinition = "Long INT, place_id INT, status VARCHAR(10)" */)
 	private Set<Place> favorites = new HashSet<>();
-
-	// private Set<Place> visitedDestinations = new HashSet<>();
-
 
 }

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RegistserUserDT0 {
+public class RegisterUserDT0 {
     @NotNull(message = "Username no puede ser nulo")
     @Size(min=2, max=30, message = "Username debe tener entre 2 y 30 caracteres")
     private String username;

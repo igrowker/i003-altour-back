@@ -1,7 +1,7 @@
 package com.igrowker.altour.controller;
 
 import com.igrowker.altour.dtos.internal.User.LoginUserDTO;
-import com.igrowker.altour.dtos.internal.User.UserDTO;
+import com.igrowker.altour.dtos.internal.User.UserReadDTO;
 import com.igrowker.altour.persistence.entity.CustomUser;
 import com.igrowker.altour.persistence.entity.Place;
 import com.igrowker.altour.persistence.entity.VenueType;
@@ -25,36 +25,24 @@ public class UserController {
     private IUserService userService;
 
 
+    // todo VERIFICAR FUNCIONAMIENTO
     @DeleteMapping
     public ResponseEntity<?> deleteUser(@RequestBody @Valid LoginUserDTO loginUserDTO) {        ;
         return new ResponseEntity<>(userService.deleteUser(loginUserDTO.getEmail()), HttpStatus.OK);
     }
-
-    @GetMapping("/profile/")
-    public ResponseEntity<?> getUser(Authentication authentication) {
+    // todo TERMINAR LOGICA
+    @PutMapping("/profile/")
+    public ResponseEntity<UserReadDTO> updateUser(@RequestBody UserReadDTO userReadDTO,
+                                                  Authentication authentication) {
         CustomUser user = (CustomUser) authentication.getPrincipal();
-        return new ResponseEntity<>( UserDTO.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .maxSearchDistance(user.getMaxSearchDistance())
-                .username(user.getUsername())
-                .preferredCrowdLevel(user.getPreferredCrowdLevel())
-                .preferences(new HashSet<>()) // todo ERROR => Could not write JSON: failed to lazily initialize a collection of role: com.igrowker.altour.persistence.entity.CustomUser.preferences: could not initialize proxy - no Session
-                .favorites(new HashSet<>()) // todo ERROR => Could not write JSON: failed to lazily initialize a collection of role: com.igrowker.altour.persistence.entity.CustomUser.fav: could not initialize proxy - no Session
-                // .visitedDestinations(new HashSet<>())// todo ERROR => Could not write JSON: failed to lazily initialize a collection of role: com.igrowker.altour.persistence.entity.CustomUser.fav: could not initialize proxy - no Session
-                .build(),
-                HttpStatus.OK);
+        return new ResponseEntity<>(userService.updateUser(user.getId(), userReadDTO), HttpStatus.ACCEPTED);
     }
 
-    @PutMapping("/profile/")
-    public ResponseEntity<?> updateUser(@RequestBody UserDTO userDTO) {
-        // todo aca deberiamos modificar los campos crowdLevel y maxDistance
-        // todo aca deberiamos modificar los campos crowdLevel y maxDistance
-        // todo aca deberiamos modificar los campos crowdLevel y maxDistance
-        // todo aca deberiamos modificar los campos crowdLevel y maxDistance
-        // todo aca deberiamos modificar los campos crowdLevel y maxDistance
 
-        return new ResponseEntity<>(userService.updateUser(userDTO), HttpStatus.ACCEPTED);
+    @GetMapping("/profile/")
+    public ResponseEntity<UserReadDTO> getUser(Authentication authentication) {
+        CustomUser user = (CustomUser) authentication.getPrincipal();
+        return new ResponseEntity<>(userService.findUserById(user.getId()), HttpStatus.OK);
     }
 
     // PREFERENCIAS
