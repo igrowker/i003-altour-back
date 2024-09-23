@@ -1,14 +1,13 @@
-package com.igrowker.altour.service;
+package com.igrowker.altour.service.impl;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.igrowker.altour.service.IDestineBestTimeService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.igrowker.altour.dtos.external.Item;
-import com.igrowker.altour.dtos.external.Items;
 import com.igrowker.altour.dtos.external.bestTimeApi.Venue;
 import com.igrowker.altour.dtos.external.bestTimeApi.VenuesResponse;
 import com.igrowker.altour.dtos.external.bestTimeApiId.VenueInfo;
@@ -18,7 +17,7 @@ import reactor.core.publisher.Mono;
 
 // works with BEST TIME API
 @Service
-public class DestinationFilterServiceImpl implements IDestinationFilterService {
+public class DestineBestTimeServiceImpl implements IDestineBestTimeService {
 
 	@Value("${besttime.api.url}") 
 	private String bestTimeApiUrl;
@@ -27,40 +26,41 @@ public class DestinationFilterServiceImpl implements IDestinationFilterService {
 	private final WebClient hereMapsWebClient;
 	private final WebClient bestTimeWebClient;
 
-	public DestinationFilterServiceImpl(WebClient.Builder webClientBuilder) {
+	public DestineBestTimeServiceImpl(WebClient.Builder webClientBuilder) {
 		this.hereMapsWebClient = webClientBuilder.baseUrl("https://discover.search.hereapi.com/v1/").build();
 		this.bestTimeWebClient = webClientBuilder.baseUrl("https://besttime.app/api/v1/venues/").build();
 	}
-
+/*
+TODO ESTO LO DEJO COMENTADO HASTA VERIFICAR SI LO USAREMOS O NO...
 	@Override
 	public Mono<List<Item>> getDestinations(Double lat, Double lng, Integer rad, String activity,
 			String hereMapsApiKey) {
 		String uri = String.format("/discover?in=circle:%s,%s;r=%d&q=%s&apiKey=%s", lat, lng, rad, activity,
 				hereMapsApiKey);
 
-		/*
-		 * todo pendiente de obtener Description(), Price(), OpeningHours(),
-		 * DestinationType().. , revisar manejo de nulos
-		 */
+		 // todo pendiente de obtener Description(), Price(), OpeningHours(),  DestinationType().. , revisar manejo de nulos
 		return hereMapsWebClient.get().uri(uri).retrieve().bodyToMono(Items.class)
 				.map(items -> items.getItems().stream().map(
 						i -> new Item(i.getTitle(), i.getDistance(), i.getPosition(), i.getAddress(), i.getContacts()))
 						.collect(Collectors.toList()));
 	}
+*/
 
 	@Override
 	public Mono<List<Venue>> getFilteredVenues(Double lat, Double lng, Integer maxDistance, String preference,
 			Integer maxCrowdLevel, String apiKey) {
+
 		// Ojo que por defecto interpreta los . como , por eso esta formateado
 		String latStr = String.valueOf(lat).replace(",", ".");
 		String lngStr = String.valueOf(lng).replace(",", ".");
 
-		
-		String uri = String.format("/filter?api_key_private=%s&busy_max=%d&types=%s&lat=%s&lng=%s&radius=%d", apiKey,
+		String uri = String.format("filter?api_key_private=%s&busy_max=%d&types=%s&lat=%s&lng=%s&radius=%d", apiKey,
 				maxCrowdLevel, preference, latStr, lngStr, maxDistance);
 
 		String fullUrl = bestTimeApiUrl + uri; 
 		System.out.println("Full URL: " + fullUrl);
+
+		// TODO VERIFICAR PASO A PASO DE ACA HACIA ABAJO-- > SIN SEGURIDAD LLEGA BIEN LA RESPONSE, POR QUE?
 
 		return bestTimeWebClient.get().uri(uri).retrieve().bodyToMono(VenuesResponse.class)
 				.map(venuesResponse -> venuesResponse.getVenues().stream()
@@ -78,6 +78,8 @@ public class DestinationFilterServiceImpl implements IDestinationFilterService {
 	@Override
 	public Mono<VenueResponse> getVenueById(String id, String apiKey) {
 		String uri = String.format("%s?api_key_public=%s", id, apiKey);
+
+		// TODO VERIFICAR MANEJO DE EXCEPCIONES POR AQUI.. HAY VARIOS TIPOS DE LA API EXTERNA, DE MAPEO DE RESPUESTA, DE ID ERRONEO
 
 		 return bestTimeWebClient.get().uri(uri).retrieve().bodyToMono(VenueResponse.class)
 			        .map(venueResponse -> {

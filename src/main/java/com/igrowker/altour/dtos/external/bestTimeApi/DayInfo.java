@@ -36,10 +36,10 @@ public class DayInfo {
 	private String note;
 
 	@JsonProperty("venue_closed")
-	private Integer venueClosed;
+	private String venueClosed;
 
 	@JsonProperty("venue_open")
-	private Integer venueOpen;
+	private String venueOpen;
 
 	@JsonProperty("venue_open_close_v2")
 	private VenueOpenClose venueOpenClose;

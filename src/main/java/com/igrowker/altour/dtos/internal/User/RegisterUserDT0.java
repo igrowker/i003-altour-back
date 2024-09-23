@@ -1,26 +1,19 @@
 package com.igrowker.altour.dtos.internal.User;
 
-import com.igrowker.altour.persistence.entity.UserFavorite;
-import com.igrowker.altour.persistence.entity.UserPreference;
-import com.igrowker.altour.persistence.entity.UserVisitedDestination;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RegistserUserDT0 {
+public class RegisterUserDT0 {
     @NotNull(message = "Username no puede ser nulo")
     @Size(min=2, max=30, message = "Username debe tener entre 2 y 30 caracteres")
     private String username;

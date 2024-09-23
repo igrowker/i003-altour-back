@@ -2,18 +2,13 @@ package com.igrowker.altour.dtos.internal.User;
 
 
 import com.igrowker.altour.persistence.entity.CustomUser;
-import com.igrowker.altour.persistence.entity.UserFavorite;
-import com.igrowker.altour.persistence.entity.UserPreference;
-import com.igrowker.altour.persistence.entity.UserVisitedDestination;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import com.igrowker.altour.persistence.entity.Place;
+import com.igrowker.altour.persistence.entity.VenueType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserDTO {
+public class UserReadDTO {
     private Long id;
 
     private String username;
@@ -32,14 +27,14 @@ public class UserDTO {
 
     private Integer maxSearchDistance;
 
-    // Nivel de afluencia preferido
-    private Integer preferredCrowdLevel;
+    private Integer preferredCrowdLevel; // Nivel de afluencia preferido de 10 a 100
 
-    private Set<UserPreference> preferences = new HashSet<>();
+    private Set<VenueType> preferences = new HashSet<>();
 
-    private Set<UserFavorite> favorites = new HashSet<>();
+ //   private Set<UserFavorite> favorites = new HashSet<>();
+    private Set<Place> favorites = new HashSet<>();
 
-    private Set<UserVisitedDestination> visitedDestinations = new HashSet<>();
+    // private Set<UserVisitedDestination> visitedDestinations = new HashSet<>();
 
     public CustomUser toEntity() {
         CustomUser user = new CustomUser();
@@ -51,7 +46,7 @@ public class UserDTO {
         user.setPreferredCrowdLevel(this.preferredCrowdLevel);
         user.setPreferences(this.preferences);
         user.setFavorites(this.favorites);
-        user.setVisitedDestinations(this.visitedDestinations);
+       // user.setVisitedDestinations(this.visitedDestinations);
 
         return user;
     }
