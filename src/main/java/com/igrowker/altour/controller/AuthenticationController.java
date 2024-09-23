@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "auth")
 @Tag(name = "Autenticacion - Seguridad")
 public class AuthenticationController {
+
     @Autowired
     private UserServiceImplementation userServiceImplementation;
 

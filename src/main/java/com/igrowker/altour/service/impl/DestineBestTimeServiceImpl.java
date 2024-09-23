@@ -50,19 +50,17 @@ TODO ESTO LO DEJO COMENTADO HASTA VERIFICAR SI LO USAREMOS O NO...
 	public Mono<List<Venue>> getFilteredVenues(Double lat, Double lng, Integer maxDistance, String preference,
 			Integer maxCrowdLevel, String apiKey) {
 
-		// TODO VERIFICAR MANEJO DE EXCEPCIONES POR AQUI.. HAY VARIOS TIPOS DE LA API EXTERNA, DE MAPEO DE RESPUESTA, DE VALORES INVALIDOS, DE VALORES QUE RETORNEN RESULTADOS VACIOS..
-
-
 		// Ojo que por defecto interpreta los . como , por eso esta formateado
 		String latStr = String.valueOf(lat).replace(",", ".");
 		String lngStr = String.valueOf(lng).replace(",", ".");
 
-		
 		String uri = String.format("filter?api_key_private=%s&busy_max=%d&types=%s&lat=%s&lng=%s&radius=%d", apiKey,
 				maxCrowdLevel, preference, latStr, lngStr, maxDistance);
 
 		String fullUrl = bestTimeApiUrl + uri; 
 		System.out.println("Full URL: " + fullUrl);
+
+		// TODO VERIFICAR PASO A PASO DE ACA HACIA ABAJO-- > SIN SEGURIDAD LLEGA BIEN LA RESPONSE, POR QUE?
 
 		return bestTimeWebClient.get().uri(uri).retrieve().bodyToMono(VenuesResponse.class)
 				.map(venuesResponse -> venuesResponse.getVenues().stream()

@@ -25,11 +25,16 @@ public class UserVisitedDestination {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	/*
+	private String name;
+	 */
+	// TODO BORROR
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	private CustomUser user;
-
 	@Column(name = "destination_id", nullable = false)
 	private Long destinationId;
+
+
 
 }

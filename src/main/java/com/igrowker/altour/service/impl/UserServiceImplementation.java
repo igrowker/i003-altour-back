@@ -1,10 +1,13 @@
 package com.igrowker.altour.service.impl;
 
+import com.igrowker.altour.dtos.external.bestTimeApi.EnumVenueTypes;
 import com.igrowker.altour.dtos.internal.User.LoginUserDTO;
 import com.igrowker.altour.dtos.internal.User.RegistserUserDT0;
 import com.igrowker.altour.dtos.internal.User.UserDTO;
 import com.igrowker.altour.persistence.entity.CustomUser;
+import com.igrowker.altour.persistence.entity.VenueType;
 import com.igrowker.altour.persistence.repository.ICustomUserRepository;
+import com.igrowker.altour.persistence.repository.IVenueTypeRepository;
 import com.igrowker.altour.service.IUserService;
 import com.igrowker.altour.utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +18,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
 
+// PARA SPRING SECURITY
 @Service
 public class UserServiceImplementation implements IUserService {
 
@@ -29,6 +32,8 @@ public class UserServiceImplementation implements IUserService {
     AuthenticationManager authenticationManager;
     @Autowired
     private JWTUtils jwtUtils;
+    @Autowired
+    private IVenueTypeRepository venueTypeRepository;
 
     @Override
     public void validateNewEmail(String email) {
@@ -58,7 +63,7 @@ public class UserServiceImplementation implements IUserService {
                 .favorites(new HashSet<>())
                 .maxSearchDistance(1000) // todo valor por defecto, front que lo modifique en un update
                 .preferences(new HashSet<>())
-                .preferredCrowdLevel(1) // todo verificar que rango de valores toma esto!!
+                .preferredCrowdLevel(80) // todo Nivel de afluencia preferido de 0 a 100 => Avisar a front que TIENE QUE SER MAYOR A 10 y menor a 100
                 .visitedDestinations(new HashSet<>())
                 .build();
         userRepository.save(newUser);
@@ -91,4 +96,47 @@ public class UserServiceImplementation implements IUserService {
         return "Usuario eliminado";
     }
 
+
+    public void setMaxDistance(String username, Integer maxDistance) {
+        CustomUser user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setMaxSearchDistance(maxDistance);
+        userRepository.save(user);
+    }
+
+    public void setCrowdLevel(String username, Integer crowdLevel) {
+        CustomUser user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setPreferredCrowdLevel(crowdLevel);
+        userRepository.save(user);
+    }
+
+    @Override
+    public Set<VenueType> getPreferencesByEmail(String email) {  return  getUser(email).getPreferences();  }
+
+    @Override
+    public String addPreference(String email, String newPreference) {
+        CustomUser user = getUser(email);
+        String venueTypeName = EnumVenueTypes.valueOf(newPreference).name(); // TODO VERIFICAR EXCEPCION QUE PUEDE LANZAR DESDE FRONT SI NO ES UN ENUM VALIDO => IllegalArgumentException "No enum constant com.igrowker.altour.dtos.external.bestTimeApi.EnumVenueTypes.Museo",
+        Optional<VenueType> prefToAdd = venueTypeRepository.findByVenueType(venueTypeName);
+
+        if(prefToAdd.isEmpty()){
+            VenueType venueTypeToAdd = VenueType.builder().venueType(venueTypeName).build();
+            user.getPreferences().add(venueTypeRepository.save(venueTypeToAdd));
+        } else {
+            user.getPreferences().add(prefToAdd.get());
+        }
+        userRepository.save(user);
+        return "(ES NECESARIO RESPODNER ESTO? DEBERIAMOS RESPONDER CON UN DTO DE USER PARA ACTUALZIAR DATOS DE USUARIO EN FRONT?? )Preferencia agregada: "+newPreference;
+    }
+
+    @Override
+    public String removePreference(String email, String preferenceToRemove) {
+        CustomUser user = getUser(email);
+        String venueTypeName = EnumVenueTypes.valueOf(preferenceToRemove).name();// TODO VERIFICAR EXCEPCION QUE PUEDE LANZAR DESDE FRONT SI NO ES UN ENUM VALIDO => IllegalArgumentException "No enum constant com.igrowker.altour.dtos.external.bestTimeApi.EnumVenueTypes.Museo",
+        Optional<VenueType> prefToRemove = venueTypeRepository.findByVenueType(venueTypeName);
+        prefToRemove.ifPresent(venueType -> user.getPreferences().remove(venueType));
+        userRepository.save(user);
+        return "(ES NECESARIO RESPODNER ESTO? DEBERIAMOS RESPONDER CON UN DTO DE USER PARA ACTUALZIAR DATOS DE USUARIO EN FRONT?? )Preferencia eliminada: "+preferenceToRemove;
+    }
 }

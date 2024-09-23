@@ -58,7 +58,7 @@ TODO ESTO LO DEJO COMENTADO HASTA VERIFICAR SI LO USAREMOS O NO...
 	public Mono<List<Venue>> filterBestTime(@RequestParam Double lat,
 											@RequestParam Double lng,
 											@RequestParam String preference,
-											Authentication authentication) {//TODO Spring inyecta el obj authentication en todos los endpoints protegidos, y se puede acceder a los detalles del usuario
+											Authentication authentication) {
 		CustomUser userDetails = (CustomUser) authentication.getPrincipal();
 
 		// TODO  ".switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado")));" ESTA PARTE NO ESTOY SEGURO QUE HACE, PERO DEBERIA SER IMPOSIBLE QUE TIRE EXCEP DE USER NOT FOUND PORQUE YA TRAE JWT
@@ -72,15 +72,27 @@ TODO ESTO LO DEJO COMENTADO HASTA VERIFICAR SI LO USAREMOS O NO...
 		}).switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado")));
 	}
 
-	// works with BEST TIME API: todo QUE INFORMACION DE NEGOCIO RETORNA ESTE ENDPOINT?
-	@GetMapping("/venue/{id}")
-	public Mono<VenueResponse> getDestinationById(@PathVariable String id) {
-	    return bestTimedestineService.getVenueById(id, bestTimeApiPubKey);
-	}
 
-	// works with HERE MAPS API:  Devuelve información detallada de un punto de interés turístico específico
-	@GetMapping("/details/{placeId}")
-	public Mono<Item> getDestinationInfo(@PathVariable String placeId) {
+	// TODO reciobir un id y segun el tipo llamar a here o besttime
+	// TODO reciobir un id y segun el tipo llamar a here o besttime
+	// TODO reciobir un id y segun el tipo llamar a here o besttime
+	// TODO reciobir un id y segun el tipo llamar a here o besttime
+	@GetMapping("/{placeId}")
+	public Mono<Item> getDestinatioe4nInfo(@PathVariable String placeId) {
+		// TODO reciobir un id y segun el tipo llamar a here o besttime
+		/*
+		// works with BEST TIME API: todo QUE INFORMACION DE NEGOCIO RETORNA ESTE ENDPOINT?
+		@GetMapping("/venue/{id}")
+		public Mono<VenueResponse> getDestinationById(@PathVariable String id) {
+			return bestTimedestineService.getVenueById(id, bestTimeApiPubKey);
+		}
+
+		// works with HERE MAPS API:  Devuelve información detallada de un punto de interés turístico específico
+		@GetMapping("/details/{placeId}")
+		public Mono<Item> getDestinationInfo(@PathVariable String placeId) {
+			return hereMapsDestineService.getDetailedDestinationInfo(placeId);
+		}
+	 	*/
 		return hereMapsDestineService.getDetailedDestinationInfo(placeId);
 	}
 }

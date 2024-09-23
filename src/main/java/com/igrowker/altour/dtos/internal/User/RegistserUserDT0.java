@@ -1,7 +1,6 @@
 package com.igrowker.altour.dtos.internal.User;
 
 import com.igrowker.altour.persistence.entity.UserFavorite;
-import com.igrowker.altour.persistence.entity.UserPreference;
 import com.igrowker.altour.persistence.entity.UserVisitedDestination;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;

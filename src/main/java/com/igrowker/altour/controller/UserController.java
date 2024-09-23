@@ -1,12 +1,14 @@
 package com.igrowker.altour.controller;
 
+import com.igrowker.altour.dtos.external.bestTimeApi.EnumVenueTypes;
 import com.igrowker.altour.dtos.internal.User.LoginUserDTO;
 import com.igrowker.altour.dtos.internal.User.UserDTO;
 import com.igrowker.altour.persistence.entity.CustomUser;
 import com.igrowker.altour.persistence.entity.UserFavorite;
+import com.igrowker.altour.persistence.entity.VenueType;
 import com.igrowker.altour.service.IUserFavoriteService;
-import com.igrowker.altour.service.IUserPreferenceService;
 import com.igrowker.altour.service.IUserService;
+import com.igrowker.altour.service.impl.UserServiceImplementation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping("users")
@@ -29,8 +28,11 @@ public class UserController {
     private IUserService userService;
     @Autowired
     private IUserFavoriteService favoriteService;
+    /*
     @Autowired
     private IUserPreferenceService userPreferenceService;
+
+     */
 
     @DeleteMapping
     public ResponseEntity<?> deleteUser(@RequestBody @Valid LoginUserDTO loginUserDTO) {        ;
@@ -64,11 +66,6 @@ public class UserController {
         return new ResponseEntity<>(userService.updateUser(userDTO), HttpStatus.ACCEPTED);
     }
 
-
-    // todo Los favoritos pertencen a los usuarios, por estsa razon los meti dentro del path users/favorites
-    // todo Los favoritos pertencen a los usuarios, por estsa razon los meti dentro del path users/favorites
-    // todo Los favoritos pertencen a los usuarios, por estsa razon los meti dentro del path users/favorites
-    // todo Los favoritos pertencen a los usuarios, por estsa razon los meti dentro del path users/favorites
     @GetMapping("/favorites")
     public ResponseEntity<List<UserFavorite>> getFavorites(@RequestBody String username) {
         try {
@@ -87,27 +84,19 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding favorite");
         }
     }
-
-
-
-    // todo las preferencias pertencen a los usuarios, por estsa razon los meti dentro del path users/preferences
-    // todo las preferencias pertencen a los usuarios, por estsa razon los meti dentro del path users/preferences
-    // todo las preferencias pertencen a los usuarios, por estsa razon los meti dentro del path users/preferences
-    // todo las preferencias pertencen a los usuarios, por estsa razon los meti dentro del path users/preferences
     @GetMapping("/preferences/")
-    public ResponseEntity<Set<String>> getPreferences(Authentication authentication) {//TODO Spring inyecta el obj authentication en todos los endpoints protegidos, y se puede acceder a los detalles del usuario
+    public ResponseEntity<Set<VenueType>> getPreferences(Authentication authentication) {
         CustomUser userDetails = (CustomUser) authentication.getPrincipal();
-        return new ResponseEntity<>(userPreferenceService.getPreferencesByEmail(userDetails.getUsername()) , HttpStatus.OK);
+        return new ResponseEntity<>(userService.getPreferencesByEmail(userDetails.getUsername()) , HttpStatus.OK);
     }
     @PostMapping("/preferences/")
-    public ResponseEntity<String> addPreference(@RequestParam String preference, Authentication authentication) {//TODO Spring inyecta el obj authentication en todos los endpoints protegidos, y se puede acceder a los detalles del usuario
+    public ResponseEntity<String> addPreference(@RequestParam String preference, Authentication authentication) {
         CustomUser userDetails = (CustomUser) authentication.getPrincipal();
-        return new ResponseEntity<>(userPreferenceService.addPreference(userDetails.getUsername(), preference) , HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.addPreference(userDetails.getUsername(), preference) , HttpStatus.CREATED);
     }
     @DeleteMapping("/preferences/")
-    public ResponseEntity<String> removePreference(@RequestParam String preference, Authentication authentication) {//TODO Spring inyecta el obj authentication en todos los endpoints protegidos, y se puede acceder a los detalles del usuario
+    public ResponseEntity<String> removePreference(@RequestParam String preference, Authentication authentication) {
         CustomUser userDetails = (CustomUser) authentication.getPrincipal();
-        return new ResponseEntity<>(userPreferenceService.removePreference(userDetails.getUsername(), preference), HttpStatus.OK);
+        return new ResponseEntity<>(userService.removePreference(userDetails.getUsername(), preference), HttpStatus.OK);
     }
-
 }

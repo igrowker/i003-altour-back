@@ -37,6 +37,7 @@ public class SecurityConfig {
                         request.requestMatchers("auth/**").permitAll()
                                 .requestMatchers("docs/**").permitAll()
                                 .requestMatchers("api-docs/**").permitAll()
+                                .requestMatchers("/**").permitAll()
                                 .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
