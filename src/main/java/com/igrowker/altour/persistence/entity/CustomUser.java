@@ -33,16 +33,7 @@ public class CustomUser implements UserDetails {
 	// Distancia máxima de búsqueda
 	@Column(name = "max_search_distance", nullable = false)
 	private Integer maxSearchDistance;
-/*
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-	@Builder.Default
-	private Set<UserPreference> preferences = new HashSet<>();
 
- */
-// TODO VERIFICAR FUNCIONAMIENTO!!!
-// TODO VERIFICAR FUNCIONAMIENTO!!!
-// TODO VERIFICAR FUNCIONAMIENTO!!!
-// TODO VERIFICAR FUNCIONAMIENTO!!!
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(
 			name = "user_venue_types",
@@ -50,23 +41,6 @@ public class CustomUser implements UserDetails {
 			inverseJoinColumns = @JoinColumn(name = "venue_type_id")
 	)
 	private Set<VenueType> preferences = new HashSet<>();
-	/*
-	@ElementCollection(fetch = FetchType.LAZY)
-	@CollectionTable(name = "user_preferences",
-			joinColumns = @JoinColumn(name = "user_id"))
-	@Enumerated(EnumType.STRING)
-	private List<EnumVenueTypes> preferences = new ArrayList<>();
-
-	 */
-	// TODO VERIFICAR FUNCIONAMIENTO!!!
-// TODO VERIFICAR FUNCIONAMIENTO!!!
-// TODO VERIFICAR FUNCIONAMIENTO!!!
-// TODO VERIFICAR FUNCIONAMIENTO!!!
-
-
-
-
-
 
 	@Column(name = "preferred_crowd_level", nullable = false)
 	private Integer preferredCrowdLevel; // TODO que escala de valores usaremos para esto? Nivel de afluencia preferido
@@ -86,11 +60,7 @@ public class CustomUser implements UserDetails {
 	}
 
 
-
-// todo metodos a verificar
-// todo metodos a verificar
-// todo metodos a verificar
-// todo metodos a verificar
+/*
 
 //todo un usuario tiene muchos favoritos, y un favorito puede estar relacionado a muchos usuarios, sin embargo, el favorito no conoce al usuario, por lo que el id del destino se tiene que meter en una lista de destinos favoritos en el user, como fk.. Aplicaria lo mismo para visitados.. CHARLAR
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -101,9 +71,15 @@ public class CustomUser implements UserDetails {
 	@Builder.Default
 	private Set<UserVisitedDestination> visitedDestinations = new HashSet<>();
 // todo metodos a verificar
-// todo metodos a verificar
-// todo metodos a verificar
-// todo metodos a verificar
+ */
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "user_places",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "place_id"))
+	private Set<Place> favorites = new HashSet<>();
+
+	// private Set<Place> visitedDestinations = new HashSet<>();
 
 
 }

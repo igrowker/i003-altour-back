@@ -1,23 +1,15 @@
 package com.igrowker.altour.dtos.internal.User;
 
 
-import com.igrowker.altour.dtos.external.bestTimeApi.EnumVenueTypes;
 import com.igrowker.altour.persistence.entity.CustomUser;
-import com.igrowker.altour.persistence.entity.UserFavorite;
-import com.igrowker.altour.persistence.entity.UserVisitedDestination;
+import com.igrowker.altour.persistence.entity.Place;
 import com.igrowker.altour.persistence.entity.VenueType;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -36,24 +28,13 @@ public class UserDTO {
     private Integer maxSearchDistance;
 
     private Integer preferredCrowdLevel; // Nivel de afluencia preferido de 10 a 100
-/*
-    private Set<UserPreference> preferences = new HashSet<>();
-    // TODO ULTIMOS BUSCADOS DENTRO DE TODAS LAS OPS DE PREFERENCIAS DE BUQUEDA..
- */
 
-    // TODO VERIFICAR FUNCIONAMIENTO!!!
-// TODO VERIFICAR FUNCIONAMIENTO!!!
-// TODO VERIFICAR FUNCIONAMIENTO!!!
-// TODO VERIFICAR FUNCIONAMIENTO!!!
     private Set<VenueType> preferences = new HashSet<>();
-    // TODO VERIFICAR FUNCIONAMIENTO!!!
-// TODO VERIFICAR FUNCIONAMIENTO!!!
-// TODO VERIFICAR FUNCIONAMIENTO!!!
-// TODO VERIFICAR FUNCIONAMIENTO!!!
 
-    private Set<UserFavorite> favorites = new HashSet<>();
+ //   private Set<UserFavorite> favorites = new HashSet<>();
+    private Set<Place> favorites = new HashSet<>();
 
-    private Set<UserVisitedDestination> visitedDestinations = new HashSet<>();
+    // private Set<UserVisitedDestination> visitedDestinations = new HashSet<>();
 
     public CustomUser toEntity() {
         CustomUser user = new CustomUser();
@@ -65,7 +46,7 @@ public class UserDTO {
         user.setPreferredCrowdLevel(this.preferredCrowdLevel);
         user.setPreferences(this.preferences);
         user.setFavorites(this.favorites);
-        user.setVisitedDestinations(this.visitedDestinations);
+       // user.setVisitedDestinations(this.visitedDestinations);
 
         return user;
     }
