@@ -44,30 +44,7 @@ public class UserServiceImplementation implements IUserService {
     private CustomUserMapper userMapper;
 
 
-
     // USER CONFIG PERFIL
-    // TODO estos metodos deben ser llamados desde el UPDATE DE USER
-    public void setMaxDistance(String username, Integer maxDistance) {
-        // TODO VERIFICAR
-        // TODO VERIFICAR
-        // TODO VERIFICAR
-        // TODO VERIFICAR
-        CustomUser user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        user.setMaxSearchDistance(maxDistance);
-        userRepository.save(user);
-    }
-    // TODO estos metodos deben ser llamados desde el UPDATE DE USER
-    public void setCrowdLevel(String username, Integer crowdLevel) {
-        // TODO VERIFICAR
-        // TODO VERIFICAR
-        // TODO VERIFICAR
-        // TODO VERIFICAR
-        CustomUser user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        user.setPreferredCrowdLevel(crowdLevel);
-        userRepository.save(user);
-    }
     @Override
     public UserReadDTO updateUser(Long userId, UserReadDTO userUpdate) {
         CustomUser user = getUserById(userId);
@@ -95,10 +72,6 @@ public class UserServiceImplementation implements IUserService {
         userRepository.delete(getUserByEmail(email)); // este metodo lanzara exepcion sin no lo borra, por lo que cortara la ejecucion
         return "Usuario eliminado";
     }
-
-
-
-
 
 
     @Override
