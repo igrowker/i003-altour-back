@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DayInfo {
+	
 	@JsonProperty("day_int")
 	private Integer dayInt;
 

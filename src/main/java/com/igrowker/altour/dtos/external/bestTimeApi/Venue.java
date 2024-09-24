@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Venue {
+
 	@JsonProperty("venue_id")
 	private String venueId;
 

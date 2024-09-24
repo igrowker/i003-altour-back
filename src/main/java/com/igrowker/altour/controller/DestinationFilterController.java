@@ -1,6 +1,5 @@
 package com.igrowker.altour.controller;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.igrowker.altour.service.impl.DestineBestTimeServiceImpl;
-
 
 @RestController
 @RequestMapping("destines")
@@ -43,37 +41,40 @@ public class DestinationFilterController {
 
 	@Value("${best_time.api.pub.key}")
 	private String bestTimeApiPubKey;
-/*
-TODO ESTO LO DEJO COMENTADO HASTA VERIFICAR SI LO USAREMOS O NO...
-	@GetMapping("/filter")
-	public Mono<List<Item>> filter(@RequestParam Double lat,
-								   @RequestParam Double lng,
-								   @RequestParam Integer rad,
-								   @RequestParam String activity) {
-		return destinationFilterService.getDestinations(lat, lng, rad, activity, hereMapsApiKey);
-	}
- */
+	/*
+	 * TODO ESTO LO DEJO COMENTADO HASTA VERIFICAR SI LO USAREMOS O NO...
+	 * 
+	 * @GetMapping("/filter") public Mono<List<Item>> filter(@RequestParam Double
+	 * lat,
+	 * 
+	 * @RequestParam Double lng,
+	 * 
+	 * @RequestParam Integer rad,
+	 * 
+	 * @RequestParam String activity) { return
+	 * destinationFilterService.getDestinations(lat, lng, rad, activity,
+	 * hereMapsApiKey); }
+	 */
 
 	@GetMapping("/")
 	public List<Venue> filterBestTime(@RequestParam Double lat, @RequestParam Double lng,
-			@RequestParam(required = false) String preference, Authentication authentication) {
+			@RequestParam(required = false) String preference, @RequestParam(required = false) Integer maxCrowdLevel,
+			@RequestParam(required = false) Integer maxDistance, Authentication authentication) {
+
+		Integer crowdLevel = maxCrowdLevel != null ? maxCrowdLevel : 80;
+		Integer distance = maxDistance != null ? maxDistance : 1000;
+
+		if (authentication == null) {
+			// todo esta logica sera seguida por un usuario que no esta autenticado.. ya que
+			// front muestra mapas para logueados y no logueados
+			return bestTimedestineService.getFilteredVenues(lat, lng, distance, preference, crowdLevel, bestTimeApiKey);
+		}
 
 		CustomUser userDetails = (CustomUser) authentication.getPrincipal();
 		Optional<CustomUser> userOptional = customUserRepository.findByEmail(userDetails.getUsername());
-
-		if (userOptional.isPresent()) {
-			CustomUser user = userOptional.get();
-			Integer maxCrowdLevel = user.getPreferredCrowdLevel();
-			Integer maxDistance = user.getMaxSearchDistance();
-
-			List<Venue> venues = bestTimedestineService.getFilteredVenues(lat, lng, maxDistance, preference,
-					maxCrowdLevel, bestTimeApiKey);
-
-			return venues;
-
-		} else {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
-		}
+		crowdLevel = userOptional.get().getPreferredCrowdLevel();
+		distance = userOptional.get().getMaxSearchDistance();
+		return bestTimedestineService.getFilteredVenues(lat, lng, distance, preference, crowdLevel, bestTimeApiKey);
 	}
 
 	// TODO reciobir un id y segun el tipo llamar a here o besttime
@@ -81,11 +82,23 @@ TODO ESTO LO DEJO COMENTADO HASTA VERIFICAR SI LO USAREMOS O NO...
 	// TODO reciobir un id y segun el tipo llamar a here o besttime
 	// TODO reciobir un id y segun el tipo llamar a here o besttime
 	@GetMapping("/{placeId}")
-	public VenueResponse getDestinationInfo(@PathVariable String placeId) {
-	    // TODO: Recibir un ID y, según el tipo de servicio, llamar a HERE o BestTime
+	public Venue getDestinationInfo(@PathVariable String placeId) {
+		// Obtenemos el venue específico
+		VenueResponse venueResponse = bestTimedestineService.getVenueById(placeId, bestTimeApiPubKey);
 
-	   //Manejar la lógica quizas para llamar a here maps api o besttime tratar de filtrar y dar información buena solo tipo historia horarios precio etc
-	    // Por ahora, estamos llamando directamente a la BestTime API
-	    return bestTimedestineService.getVenueById(placeId, bestTimeApiPubKey);
+		if (venueResponse == null || venueResponse.getVenueInfo() == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Lugar no encontrado");
+		}
+
+		List<Venue> filteredVenues = bestTimedestineService.getFilteredVenues(
+				venueResponse.getVenueInfo().getVenueLat(), venueResponse.getVenueInfo().getVenueLng(), 10, null, 100,
+				bestTimeApiKey);  // los parámetros son estáticos 10 el radio para que en el filtro encuentre si o si el place concreto 100 busy max para que no lo salte etc.
+
+		// Filtrar el resultado para obtener el venue que coincide con el placeId
+		Venue matchedVenue = filteredVenues.stream().filter(v -> v.getVenueId().equals(placeId)).findFirst()
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+						"Lugar no encontrado en los resultados filtrados"));
+
+		return matchedVenue;
 	}
 }
