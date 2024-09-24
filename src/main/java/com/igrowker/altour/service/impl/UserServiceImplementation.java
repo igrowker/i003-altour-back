@@ -4,6 +4,8 @@ import com.igrowker.altour.dtos.external.bestTimeApi.EnumVenueTypes;
 import com.igrowker.altour.dtos.internal.User.LoginUserDTO;
 import com.igrowker.altour.dtos.internal.User.RegisterUserDT0;
 import com.igrowker.altour.dtos.internal.User.UserReadDTO;
+import com.igrowker.altour.exceptions.ForbiddenException;
+import com.igrowker.altour.exceptions.InvalidInputException;
 import com.igrowker.altour.exceptions.NotFoundException;
 import com.igrowker.altour.persistence.entity.CustomUser;
 import com.igrowker.altour.persistence.entity.Place;
@@ -42,45 +44,27 @@ public class UserServiceImplementation implements IUserService {
     private CustomUserMapper userMapper;
 
 
-
     // USER CONFIG PERFIL
-    // TODO estos metodos deben ser llamados desde el UPDATE DE USER
-    public void setMaxDistance(String username, Integer maxDistance) {
-        // TODO VERIFICAR
-        // TODO VERIFICAR
-        // TODO VERIFICAR
-        // TODO VERIFICAR
-        CustomUser user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        user.setMaxSearchDistance(maxDistance);
-        userRepository.save(user);
-    }
-    // TODO estos metodos deben ser llamados desde el UPDATE DE USER
-    public void setCrowdLevel(String username, Integer crowdLevel) {
-        // TODO VERIFICAR
-        // TODO VERIFICAR
-        // TODO VERIFICAR
-        // TODO VERIFICAR
-        CustomUser user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        user.setPreferredCrowdLevel(crowdLevel);
-        userRepository.save(user);
-    }
     @Override
-    public UserReadDTO updateUser(Long userId, UserReadDTO userReadDto) {
-        // todo aca deberiamos modificar los campos crowdLevel y maxDistance
-        // todo aca deberiamos modificar los campos crowdLevel y maxDistance
-        // todo aca deberiamos modificar los campos crowdLevel y maxDistance
-        // todo aca deberiamos modificar los campos crowdLevel y maxDistance
-        // todo aca deberiamos modificar los campos crowdLevel y maxDistance
-
+    public UserReadDTO updateUser(Long userId, UserReadDTO userUpdate) {
         CustomUser user = getUserById(userId);
-        // todo Determinar con front, si para actualziar hay que pasar todos los campos, sino se deberia chequear y actualziar uno por uno..
-        if (userReadDto == null || userReadDto.getEmail() == null || userReadDto.getEmail().isEmpty() || userReadDto.getPassword() == null || userReadDto.getPassword().isEmpty()) {
-            throw new RuntimeException("Missing params"); // todo CAMBIAR MANEJO EXEPCIONES PERSONALIZADAS
-        }
-        if(userRepository.existsByEmail(userReadDto.getEmail())) throw new RuntimeException("User not found"); // todo CAMBIAR MANEJO EXEPCIONES PERSONALIZADAS
+        // NO SE PUEDE CAMBIAR username ni email y si, los permisos ya fueron acceptados no se puede retirar la aprobacion.
+        if( userUpdate.getUsername() != null && ! userUpdate.getUsername().equals(user.getRealUsername())) throw new ForbiddenException("NO esta permitido cambiar username");
+        if( userUpdate.getEmail() != null && ! userUpdate.getEmail().equals(user.getEmail())) throw new ForbiddenException("NO esta permitido cambiar email");
+        if(! userUpdate.getAcceptedTOS() && user.getAcceptedTOS() ) throw new ForbiddenException("Ya no puedes retirar los permisos de uso, pero puedes eliminar la cuenta");
+        // PREFERENCES y FAVORITES debes ser maenjados a traves de sus respectivos endpoints
+        if(! userUpdate.getFavorites().isEmpty() ) throw new ForbiddenException("Los favoritos del usuario solo se pueden modificar a traves de sus endpoints");
+        // todo => if(! userUpdate.getVisitedDestinations().isEmpty() ) throw new ForbiddenException("Los Lugares visitados del usuario solo se pueden modificar a traves de sus endpoints");
 
+        // Casos permitidos
+        if(! userUpdate.getPassword().isEmpty() && !passwordEncoder.matches(userUpdate.getPassword(), user.getPassword())){
+            user.setPassword(passwordEncoder.encode(userUpdate.getPassword()));
+        }
+        if( userUpdate.getAcceptedTOS() ) user.setAcceptedTOS(true);
+        if( userUpdate.getMaxSearchDistance() >0 ) user.setMaxSearchDistance(userUpdate.getMaxSearchDistance());
+        if( userUpdate.getPreferredCrowdLevel() >0 && userUpdate.getPreferredCrowdLevel() <=100 ) user.setMaxSearchDistance(userUpdate.getPreferredCrowdLevel());
+
+        userRepository.save(user);
         return userMapper.toUserReadDto(user);
     }
     @Override
@@ -88,10 +72,6 @@ public class UserServiceImplementation implements IUserService {
         userRepository.delete(getUserByEmail(email)); // este metodo lanzara exepcion sin no lo borra, por lo que cortara la ejecucion
         return "Usuario eliminado";
     }
-
-
-
-
 
 
     @Override
@@ -182,10 +162,12 @@ public class UserServiceImplementation implements IUserService {
     @Override
     public String register(RegisterUserDT0 user) {
         validateNewEmail(user.getEmail());
+        if (! user.getPassword().equals(user.getConfirmPassword())) throw new InvalidInputException("Passwords no concuerdan!");
         CustomUser newUser = CustomUser.builder()
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .password(passwordEncoder.encode(user.getPassword()))
+                .acceptedTOS(user.getAcceptedTOS())
                 .favorites(new HashSet<>())
                 .maxSearchDistance(1000) // todo valor por defecto, front que lo modifique en un update
                 .preferences(new HashSet<>())

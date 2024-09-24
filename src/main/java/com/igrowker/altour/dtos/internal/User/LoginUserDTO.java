@@ -22,5 +22,4 @@ public class LoginUserDTO {
     @NotNull(message = "Contraseña no puede ser nula")
     @Size(min=2, max=30, message = "Contraseña debe tener entre 2 y 30 caracteres")
     private String password;
-
 }

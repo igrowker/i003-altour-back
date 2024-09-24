@@ -26,7 +26,11 @@ public class RegisterUserDT0 {
     @Size(min=2, max=30, message = "Contraseña debe tener entre 2 y 30 caracteres")
     private String password;
 
+    @NotNull(message = "Contraseña de confirmacion no puede ser nula")
+    @Size(min=2, max=30, message = "Contraseña de confirmacion debe tener entre 2 y 30 caracteres")
+    private String confirmPassword;
 
-    // TODO LOS OTROS ATRIBUTOS FALTANTES DE USUARIO SE DEBERIAN CARGAR UNA VEZ QUE EXISTA EL USUARIO.. POR LO QUE NO DEBERIA HACERSE CON UN REGISTER USER DTO SINO CON USER DTO
+    @NotNull(message = "Debes aceptar o declinar los terminos de servicio de la aplicacion")
+    private Boolean acceptedTOS;
 
 }

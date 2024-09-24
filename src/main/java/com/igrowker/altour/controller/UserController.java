@@ -30,14 +30,13 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@RequestBody @Valid LoginUserDTO loginUserDTO) {        ;
         return new ResponseEntity<>(userService.deleteUser(loginUserDTO.getEmail()), HttpStatus.OK);
     }
-    // todo TERMINAR LOGICA
+
     @PutMapping("/profile/")
     public ResponseEntity<UserReadDTO> updateUser(@RequestBody UserReadDTO userReadDTO,
                                                   Authentication authentication) {
         CustomUser user = (CustomUser) authentication.getPrincipal();
         return new ResponseEntity<>(userService.updateUser(user.getId(), userReadDTO), HttpStatus.ACCEPTED);
     }
-
 
     @GetMapping("/profile/")
     public ResponseEntity<UserReadDTO> getUser(Authentication authentication) {
