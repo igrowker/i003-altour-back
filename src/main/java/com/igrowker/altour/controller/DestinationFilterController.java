@@ -2,6 +2,7 @@ package com.igrowker.altour.controller;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import com.igrowker.altour.dtos.external.Item;
 import com.igrowker.altour.dtos.external.bestTimeApi.Venue;
@@ -20,7 +21,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.igrowker.altour.service.impl.DestineBestTimeServiceImpl;
 
-import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("destines")
@@ -55,44 +55,37 @@ TODO ESTO LO DEJO COMENTADO HASTA VERIFICAR SI LO USAREMOS O NO...
  */
 
 	@GetMapping("/")
-	public Mono<List<Venue>> filterBestTime(@RequestParam Double lat,
-											@RequestParam Double lng,
-											@RequestParam String preference,
-											Authentication authentication) {
+	public List<Venue> filterBestTime(@RequestParam Double lat, @RequestParam Double lng,
+			@RequestParam(required = false) String preference, Authentication authentication) {
+
 		CustomUser userDetails = (CustomUser) authentication.getPrincipal();
+		Optional<CustomUser> userOptional = customUserRepository.findByEmail(userDetails.getUsername());
 
-		// TODO  ".switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado")));" ESTA PARTE NO ESTOY SEGURO QUE HACE, PERO DEBERIA SER IMPOSIBLE QUE TIRE EXCEP DE USER NOT FOUND PORQUE YA TRAE JWT
-
-		// TODO ESTA TIRANDO ERROR Error calling BestTime API: 404 Not Found from GET https://besttime.app/api/v1/venues/filter, SERA POR EL FILTRO? PEDIR AYUDA A PABLO PARA ENTENDER LA API
-		return Mono.justOrEmpty(customUserRepository.findByEmail(userDetails.getUsername())).flatMap(user -> {
+		if (userOptional.isPresent()) {
+			CustomUser user = userOptional.get();
 			Integer maxCrowdLevel = user.getPreferredCrowdLevel();
 			Integer maxDistance = user.getMaxSearchDistance();
-			return bestTimedestineService.getFilteredVenues(lat, lng, maxDistance, preference, maxCrowdLevel,
-					bestTimeApiKey);
-		}).switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado")));
-	}
 
+			List<Venue> venues = bestTimedestineService.getFilteredVenues(lat, lng, maxDistance, preference,
+					maxCrowdLevel, bestTimeApiKey);
+
+			return venues;
+
+		} else {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
+		}
+	}
 
 	// TODO reciobir un id y segun el tipo llamar a here o besttime
 	// TODO reciobir un id y segun el tipo llamar a here o besttime
 	// TODO reciobir un id y segun el tipo llamar a here o besttime
 	// TODO reciobir un id y segun el tipo llamar a here o besttime
 	@GetMapping("/{placeId}")
-	public Mono<Item> getDestinatioe4nInfo(@PathVariable String placeId) {
-		// TODO reciobir un id y segun el tipo llamar a here o besttime
-		/*
-		// works with BEST TIME API: todo QUE INFORMACION DE NEGOCIO RETORNA ESTE ENDPOINT?
-		@GetMapping("/venue/{id}")
-		public Mono<VenueResponse> getDestinationById(@PathVariable String id) {
-			return bestTimedestineService.getVenueById(id, bestTimeApiPubKey);
-		}
+	public VenueResponse getDestinationInfo(@PathVariable String placeId) {
+	    // TODO: Recibir un ID y, según el tipo de servicio, llamar a HERE o BestTime
 
-		// works with HERE MAPS API:  Devuelve información detallada de un punto de interés turístico específico
-		@GetMapping("/details/{placeId}")
-		public Mono<Item> getDestinationInfo(@PathVariable String placeId) {
-			return hereMapsDestineService.getDetailedDestinationInfo(placeId);
-		}
-	 	*/
-		return hereMapsDestineService.getDetailedDestinationInfo(placeId);
+	   //Manejar la lógica quizas para llamar a here maps api o besttime tratar de filtrar y dar información buena solo tipo historia horarios precio etc
+	    // Por ahora, estamos llamando directamente a la BestTime API
+	    return bestTimedestineService.getVenueById(placeId, bestTimeApiPubKey);
 	}
 }
