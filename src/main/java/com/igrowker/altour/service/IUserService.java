@@ -1,5 +1,6 @@
 package com.igrowker.altour.service;
 
+import com.igrowker.altour.dtos.internal.User.AuthResponse;
 import com.igrowker.altour.dtos.internal.User.LoginUserDTO;
 import com.igrowker.altour.dtos.internal.User.RegisterUserDT0;
 import com.igrowker.altour.dtos.internal.User.UserReadDTO;
@@ -17,21 +18,21 @@ public interface IUserService {
 
     // USER CONFIG PERFIL
     UserReadDTO updateUser(Long userId, UserReadDTO user);
-    String deleteUser(String email);
+    String deleteUser(LoginUserDTO loginUserDTO);
 
     // USERS- PLACES
     Set<Place> getAllFavorites(Long userId);
-    String addFavorite (Long userId,String externalIdPlace);
-    String deleteFavorite(Long userId, String externalIdPlace);
+    Set<Place> addFavorite (Long userId,String externalIdPlace);
+    Set<Place> deleteFavorite(Long userId, String externalIdPlace);
 
     // SECURITY
-    String login (LoginUserDTO loginUserDTO);
+    AuthResponse login (LoginUserDTO loginUserDTO);
     void validateNewEmail(String email);
-    String register (RegisterUserDT0 user);
+    AuthResponse register (RegisterUserDT0 user);
 
     // PREFERENCES
     Set<VenueType> getPreferencesByEmail (String preference);
-    String addPreference (String email, String newPreference);
-    String removePreference (String email, String preferenceToRemove);
+    Set<VenueType> addPreference (String email, String newPreference);
+    Set<VenueType> removePreference (String email, String preferenceToRemove);
 
 }

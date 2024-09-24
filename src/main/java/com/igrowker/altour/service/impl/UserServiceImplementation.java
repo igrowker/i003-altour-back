@@ -1,9 +1,11 @@
 package com.igrowker.altour.service.impl;
 
 import com.igrowker.altour.dtos.external.bestTimeApi.EnumVenueTypes;
+import com.igrowker.altour.dtos.internal.User.AuthResponse;
 import com.igrowker.altour.dtos.internal.User.LoginUserDTO;
 import com.igrowker.altour.dtos.internal.User.RegisterUserDT0;
 import com.igrowker.altour.dtos.internal.User.UserReadDTO;
+import com.igrowker.altour.exceptions.BadCredentialsException;
 import com.igrowker.altour.exceptions.ForbiddenException;
 import com.igrowker.altour.exceptions.InvalidInputException;
 import com.igrowker.altour.exceptions.NotFoundException;
@@ -68,8 +70,10 @@ public class UserServiceImplementation implements IUserService {
         return userMapper.toUserReadDto(user);
     }
     @Override
-    public String deleteUser(String email) {
-        userRepository.delete(getUserByEmail(email)); // este metodo lanzara exepcion sin no lo borra, por lo que cortara la ejecucion
+    public String deleteUser(LoginUserDTO loginUserDTO) {
+        CustomUser user = getUserByEmail(loginUserDTO.getEmail());
+        if (! passwordEncoder.matches(loginUserDTO.getPassword(), user.getPassword())) throw new BadCredentialsException();
+        userRepository.delete(user);
         return "Usuario eliminado";
     }
 
@@ -84,7 +88,7 @@ public class UserServiceImplementation implements IUserService {
 
     // FAVORITES
     @Override
-    public String addFavorite(Long userId, String externalIdPlace) {
+    public Set<Place> addFavorite(Long userId, String externalIdPlace) {
         CustomUser user = getUserById(userId);
         Optional<Place> placeToAdd = placeService.findPlaceByExternalAPI(externalIdPlace);
 
@@ -106,20 +110,20 @@ public class UserServiceImplementation implements IUserService {
             user.getFavorites().add(placeToAdd.get());
             userRepository.save(user);
         }
-        return "ESTO ESTA BIEN? DEBERIAMOS RESPONDER OTRA COSA ME PARECE Se agrego favorito con nombre: ==>>> ";
+        return getUserById(userId).getFavorites();
     }
     @Override
     public Set<Place> getAllFavorites(Long userId) {
         return getUserById(userId).getFavorites();
     }
     @Override
-    public String deleteFavorite(Long userId, String externalIdPlace) {
+    public Set<Place> deleteFavorite(Long userId, String externalIdPlace) {
         CustomUser user = getUserById(userId);
         Optional<Place> placeToRemove = placeService.findPlaceByExternalAPI(externalIdPlace);
         if(placeToRemove.isPresent()){
             user.getFavorites().remove(placeToRemove.get());
             userRepository.save(user);
-            return "ESTO ESTA BIEN? DEBERIAMOS RESPONDER OTRA COSA ME PARECE Se elimino favorito con nombre: ==>>> "+placeToRemove.get().getName();
+            return  getUserById(userId).getFavorites();
         }
         throw new NotFoundException("No se encontro el favorito a eliminar");
     }
@@ -128,39 +132,46 @@ public class UserServiceImplementation implements IUserService {
     @Override
     public Set<VenueType> getPreferencesByEmail(String email) {  return  getUserByEmail(email).getPreferences();  }
     @Override
-    public String addPreference(String email, String newPreference) {
+    public Set<VenueType> addPreference(String email, String newPreference) {
         CustomUser user = getUserByEmail(email);
-        String venueTypeName = EnumVenueTypes.valueOf(newPreference).name(); // TODO VERIFICAR EXCEPCION QUE PUEDE LANZAR DESDE FRONT SI NO ES UN ENUM VALIDO => IllegalArgumentException "No enum constant com.igrowker.altour.dtos.external.bestTimeApi.EnumVenueTypes.Museo",
-        Optional<VenueType> prefToAdd = venueTypeRepository.findByVenueType(venueTypeName);
-
-        if(prefToAdd.isEmpty()){
-            VenueType venueTypeToAdd = VenueType.builder().venueType(venueTypeName).build();
-            user.getPreferences().add(venueTypeRepository.save(venueTypeToAdd));
-        } else {
-            user.getPreferences().add(prefToAdd.get());
+        try {
+            String venueTypeName = EnumVenueTypes.valueOf(newPreference).name();
+            Optional<VenueType> prefToAdd = venueTypeRepository.findByVenueType(venueTypeName);
+            if(prefToAdd.isEmpty()){
+                VenueType venueTypeToAdd = VenueType.builder().venueType(venueTypeName).build();
+                user.getPreferences().add(venueTypeRepository.save(venueTypeToAdd));
+            } else {
+                user.getPreferences().add(prefToAdd.get());
+            }
+            userRepository.save(user);
+            return user.getPreferences();
+        } catch (IllegalArgumentException e){ // exception que se lanza si es un enum invalido
+            throw new InvalidInputException("Preferencia no compatible");
         }
-        userRepository.save(user);
-        return "(ES NECESARIO RESPODNER ESTO? DEBERIAMOS RESPONDER CON UN DTO DE USER PARA ACTUALZIAR DATOS DE USUARIO EN FRONT?? )Preferencia agregada: "+newPreference;
     }
     @Override
-    public String removePreference(String email, String preferenceToRemove) {
+    public Set<VenueType> removePreference(String email, String preferenceToRemove) {
         CustomUser user = getUserByEmail(email);
-        String venueTypeName = EnumVenueTypes.valueOf(preferenceToRemove).name();// TODO VERIFICAR EXCEPCION QUE PUEDE LANZAR DESDE FRONT SI NO ES UN ENUM VALIDO => IllegalArgumentException "No enum constant com.igrowker.altour.dtos.external.bestTimeApi.EnumVenueTypes.Museo",
-        Optional<VenueType> prefToRemove = venueTypeRepository.findByVenueType(venueTypeName);
-        prefToRemove.ifPresent(venueType -> user.getPreferences().remove(venueType));
-        userRepository.save(user);
-        return "(ES NECESARIO RESPODNER ESTO? DEBERIAMOS RESPONDER CON UN DTO DE USER PARA ACTUALZIAR DATOS DE USUARIO EN FRONT?? )Preferencia eliminada: "+preferenceToRemove;
+        try {
+            String venueTypeName = EnumVenueTypes.valueOf(preferenceToRemove).name();
+            Optional<VenueType> prefToRemove = venueTypeRepository.findByVenueType(venueTypeName);
+            prefToRemove.ifPresent(venueType -> user.getPreferences().remove(venueType));
+            userRepository.save(user);
+            return user.getPreferences();
+        } catch (IllegalArgumentException e){ // exception que se lanza si es un enum invalido
+            throw new InvalidInputException("Preferencia no compatible");
+        }
     }
 
     // AUTH
     @Override
-    public String login(LoginUserDTO loginUserDTO) {
+    public AuthResponse login(LoginUserDTO loginUserDTO) {
         CustomUser dbUser = getUserByEmail(loginUserDTO.getEmail());
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUserDTO.getEmail(), loginUserDTO.getPassword()));
-        return jwtUtils.generateToken(dbUser);
+        return new AuthResponse(jwtUtils.generateToken(dbUser));
     }
     @Override
-    public String register(RegisterUserDT0 user) {
+    public AuthResponse register(RegisterUserDT0 user) {
         validateNewEmail(user.getEmail());
         if (! user.getPassword().equals(user.getConfirmPassword())) throw new InvalidInputException("Passwords no concuerdan!");
         CustomUser newUser = CustomUser.builder()
@@ -176,8 +187,7 @@ public class UserServiceImplementation implements IUserService {
                 .build();
         userRepository.save(newUser);
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
-        return jwtUtils.generateToken(newUser);
-
+        return new AuthResponse(jwtUtils.generateToken(newUser));
     }
     @Override
     public void validateNewEmail(String email) {

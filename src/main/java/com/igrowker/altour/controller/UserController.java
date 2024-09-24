@@ -24,11 +24,9 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
-
-    // todo VERIFICAR FUNCIONAMIENTO
     @DeleteMapping
-    public ResponseEntity<?> deleteUser(@RequestBody @Valid LoginUserDTO loginUserDTO) {        ;
-        return new ResponseEntity<>(userService.deleteUser(loginUserDTO.getEmail()), HttpStatus.OK);
+    public ResponseEntity<String> deleteUser(@RequestBody @Valid LoginUserDTO loginUserDTO) {
+        return new ResponseEntity<>(userService.deleteUser(loginUserDTO), HttpStatus.OK);
     }
 
     @PutMapping("/profile/")
@@ -51,12 +49,12 @@ public class UserController {
         return new ResponseEntity<>(userService.getPreferencesByEmail(userDetails.getUsername()) , HttpStatus.OK);
     }
     @PostMapping("/preferences/")
-    public ResponseEntity<String> addPreference(@RequestParam String preference, Authentication authentication) {
+    public ResponseEntity<Set<VenueType>> addPreference(@RequestParam String preference, Authentication authentication) {
         CustomUser userDetails = (CustomUser) authentication.getPrincipal();
         return new ResponseEntity<>(userService.addPreference(userDetails.getUsername(), preference) , HttpStatus.CREATED);
     }
     @DeleteMapping("/preferences/")
-    public ResponseEntity<String> removePreference(@RequestParam String preference, Authentication authentication) {
+    public ResponseEntity<Set<VenueType>> removePreference(@RequestParam String preference, Authentication authentication) {
         CustomUser userDetails = (CustomUser) authentication.getPrincipal();
         return new ResponseEntity<>(userService.removePreference(userDetails.getUsername(), preference), HttpStatus.OK);
     }
@@ -68,13 +66,13 @@ public class UserController {
         return new ResponseEntity<>(userService.getAllFavorites(user.getId()), HttpStatus.OK);
     }
     @PostMapping("/favorites/")
-    public ResponseEntity<String> addFavorite(@RequestParam String externalIdPlace,
+    public ResponseEntity<Set<Place>> addFavorite(@RequestParam String externalIdPlace,
                                               Authentication authentication) {
         CustomUser user = (CustomUser) authentication.getPrincipal();
         return new ResponseEntity<>(userService.addFavorite(user.getId(), externalIdPlace), HttpStatus.CREATED);
     }
     @DeleteMapping("/favorites/")
-    public ResponseEntity<String> deleteFavorite(@RequestParam String externalIdPlace,
+    public ResponseEntity<Set<Place>> deleteFavorite(@RequestParam String externalIdPlace,
                                                  Authentication authentication) {
         CustomUser user = (CustomUser) authentication.getPrincipal();
         return new ResponseEntity<>(userService.deleteFavorite(user.getId(), externalIdPlace), HttpStatus.OK);

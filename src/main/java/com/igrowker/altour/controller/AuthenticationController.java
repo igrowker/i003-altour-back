@@ -1,5 +1,6 @@
 package com.igrowker.altour.controller;
 
+import com.igrowker.altour.dtos.internal.User.AuthResponse;
 import com.igrowker.altour.dtos.internal.User.RegisterUserDT0;
 import com.igrowker.altour.dtos.internal.User.LoginUserDTO;
 import com.igrowker.altour.service.impl.UserServiceImplementation;
@@ -19,12 +20,12 @@ public class AuthenticationController {
     private UserServiceImplementation userServiceImplementation;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid LoginUserDTO loginUserDTO) {
+    public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginUserDTO loginUserDTO) {
         return new ResponseEntity<>(userServiceImplementation.login(loginUserDTO), HttpStatus.OK);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody @Valid RegisterUserDT0 user) {
+    public ResponseEntity<AuthResponse> register(@RequestBody @Valid RegisterUserDT0 user) {
         return new ResponseEntity<>(userServiceImplementation.register(user), HttpStatus.CREATED);
     }
 }
