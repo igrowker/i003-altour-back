@@ -3,6 +3,7 @@ package com.igrowker.altour.persistence.entity;
 import com.igrowker.altour.dtos.external.bestTimeApi.EnumVenueTypes;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -22,13 +23,17 @@ public class CustomUser implements UserDetails {
 	private Long id;
 
 	@Column(nullable = false, unique = true)
-	private String username; // todo yo lo eliminaria, porque personalmente no me gusta, pero como decidan
+	private String username;
 
 	@Column(nullable = false, unique = true)
 	private String email;
 
 	@Column(nullable = false)
 	private String password;
+
+	// @Column(nullable = false)
+	@ColumnDefault(value = "false")
+	private Boolean acceptedTOS;
 
 	// Distancia máxima de búsqueda
 	@Column(name = "max_search_distance", nullable = false)
@@ -49,6 +54,9 @@ public class CustomUser implements UserDetails {
 	@Override
 	public String getUsername() {
 		return email;
+	}
+	public String getRealUsername() {
+		return username;
 	}
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

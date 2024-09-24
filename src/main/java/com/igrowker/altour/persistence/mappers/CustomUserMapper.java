@@ -10,8 +10,9 @@ public class CustomUserMapper {
     public UserReadDTO toUserReadDto(CustomUser user){
         return UserReadDTO.builder()
                 .id(user.getId())
-                .username(user.getUsername())
+                .username(user.getRealUsername())
                 .email(user.getEmail())
+                .acceptedTOS(user.getAcceptedTOS())
                 .maxSearchDistance(user.getMaxSearchDistance())
                 .preferredCrowdLevel(user.getPreferredCrowdLevel())
                 .preferences(user.getPreferences())

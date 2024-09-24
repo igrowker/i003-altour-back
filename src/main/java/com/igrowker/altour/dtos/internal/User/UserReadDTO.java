@@ -4,6 +4,8 @@ package com.igrowker.altour.dtos.internal.User;
 import com.igrowker.altour.persistence.entity.CustomUser;
 import com.igrowker.altour.persistence.entity.Place;
 import com.igrowker.altour.persistence.entity.VenueType;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,6 +27,8 @@ public class UserReadDTO {
 
     private String password;
 
+    private Boolean acceptedTOS;
+
     private Integer maxSearchDistance;
 
     private Integer preferredCrowdLevel; // Nivel de afluencia preferido de 10 a 100
@@ -42,6 +46,7 @@ public class UserReadDTO {
         user.setUsername(this.username);
         user.setEmail(this.email);
         user.setPassword(this.password);
+        user.setAcceptedTOS(this.getAcceptedTOS());
         user.setMaxSearchDistance(this.maxSearchDistance);
         user.setPreferredCrowdLevel(this.preferredCrowdLevel);
         user.setPreferences(this.preferences);
