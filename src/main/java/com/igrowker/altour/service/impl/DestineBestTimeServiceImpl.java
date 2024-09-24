@@ -65,7 +65,6 @@ public class DestineBestTimeServiceImpl implements IDestineBestTimeService {
 
 		  StringBuilder uriBuilder = new StringBuilder(String.format(
 				  // busy min pongo 1 para evitar cuando esta cerrado el now = true es para que filtre la ocupacion de la hora correspondiente a ahora limit 100 maximo 500 sitios
-				  //pongo en 100 porque en 500 tira un error a veces quizas con la carga del tamaño o espera de la respuesta de resttemplate
 		            "https://besttime.app/api/v1/venues/filter?api_key_private=%s&busy_min=%d&busy_max=%d&lat=%s&lng=%s&radius=%d&now=true&busy_conf=all&limit=100",
 		            apiKey, minCrowdLevel, maxCrowdLevel, latStr, lngStr, maxDistance));
 
