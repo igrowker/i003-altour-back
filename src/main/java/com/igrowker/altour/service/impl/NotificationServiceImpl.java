@@ -24,6 +24,8 @@ public class NotificationServiceImpl implements INotificationService {
     @Autowired
     private HikariCheckpointRestoreLifecycle hikariCheckpointRestoreLifecycle;
 
+    private static final double VARIATION_PERCENTAGE_THRESHOLD = 0.1; //? 10%
+
     @Override
     public NotificationResponseDTO checkPopulationChange(NotificationRequestDTO request) {
 
@@ -56,13 +58,13 @@ public class NotificationServiceImpl implements INotificationService {
         // TODO: A DONDE LLAMAR PARA TENER LA AFLUENCIA DE GENTE EN ESA POSICION EN PARTICULAR
         newData.setPopulation(request.getPopulation());
 
-        if (oldData.getPopulation() >= newData.getPopulation() * 1.1) {
+        if (oldData.getPopulation() >= newData.getPopulation() * (1 + VARIATION_PERCENTAGE_THRESHOLD)) {
             response.setPopulationChange(true);
             response.setNewPopulation(newData.getPopulation());
             int populationIncrease = 0; //! CALCULAR VARIACION DE PORCENTAJE
             response.setDetails("The population has increased at the location by  " + populationIncrease + "%");
         }
-        else if (oldData.getPopulation() <= newData.getPopulation() * 0.9) {
+        else if (oldData.getPopulation() <= newData.getPopulation() * (1 - VARIATION_PERCENTAGE_THRESHOLD)) {
             response.setPopulationChange(true);
             response.setNewPopulation(newData.getPopulation());
             int populationDecrease = 0; //! CALCULAR VARIACION DE PORCENTAJE

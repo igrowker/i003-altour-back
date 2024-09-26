@@ -30,7 +30,7 @@ public class NotificationsRepository implements INotificationsRepository {
                 e.printStackTrace();
                 return null;
         }
-        
+
         return userLocationAndPopulation;
     }
 
