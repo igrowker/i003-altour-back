@@ -115,6 +115,13 @@
 			<version>2.3.0</version>
 		</dependency>
 		<!-- para swagger -->
+
+		<!-- Para redis -->
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>5.1.2</version>
+		</dependency>
 	</dependencies>
 
 	<build>
