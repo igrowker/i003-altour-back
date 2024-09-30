@@ -9,6 +9,7 @@ import com.igrowker.altour.service.IUserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -23,6 +24,9 @@ public class UserController {
 
     @Autowired
     private IUserService userService;
+    
+	@Value("${best_time.api.pub.key}")
+	private String bestTimeApiPubKey;
 
     @DeleteMapping
     public ResponseEntity<String> deleteUser(@RequestBody @Valid LoginUserDTO loginUserDTO) {
@@ -69,7 +73,7 @@ public class UserController {
     public ResponseEntity<Set<Place>> addFavorite(@RequestParam String externalIdPlace,
                                               Authentication authentication) {
         CustomUser user = (CustomUser) authentication.getPrincipal();
-        return new ResponseEntity<>(userService.addFavorite(user.getId(), externalIdPlace), HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.addFavorite(user.getId(), externalIdPlace, bestTimeApiPubKey), HttpStatus.CREATED);
     }
     @DeleteMapping("/favorites/")
     public ResponseEntity<Set<Place>> deleteFavorite(@RequestParam String externalIdPlace,
