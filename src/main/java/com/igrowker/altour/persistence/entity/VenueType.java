@@ -1,6 +1,5 @@
 package com.igrowker.altour.persistence.entity;
 
-import com.igrowker.altour.dtos.external.bestTimeApi.EnumVenueTypes;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,11 +13,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 public class VenueType {
-    // REPRESENTA LAS CATEGORIAS DE BUSQUEDA DEL USUARIO REPRESENTANDO LAS CATEGORIAS DE EnumVenueTypes =>  RESTAURANT, SHOPPING, FAST_FOOD....
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	// REPRESENTA LAS CATEGORIAS DE BUSQUEDA DEL USUARIO REPRESENTANDO LAS
+	// CATEGORIAS DE EnumVenueTypes => RESTAURANT, SHOPPING, FAST_FOOD....
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    @Column(unique = true)
-    private String venueType;
+	@Column(unique = true)
+	private String venueType;
+
 }
