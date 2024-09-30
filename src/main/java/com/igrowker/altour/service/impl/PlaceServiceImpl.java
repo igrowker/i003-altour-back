@@ -10,11 +10,17 @@ import java.util.Optional;
 
 @Service
 public class PlaceServiceImpl implements IPlaceService {
-    @Autowired
-    IPlaceRepository placeRepository;
+	@Autowired
+	IPlaceRepository placeRepository;
 
-    @Override
-    public Optional<Place> findPlaceByExternalAPI(String idPlace) {
-        return  placeRepository.findPlaceByExternalID(idPlace);
-    }
+	@Override
+	public Optional<Place> findPlaceByExternalID(String idPlace) {
+		return placeRepository.findByExternalID(idPlace);
+	}
+
+	@Override
+	public Place save(Place place) {
+		return placeRepository.save(place);
+	}
+
 }

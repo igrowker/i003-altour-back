@@ -6,5 +6,8 @@ import java.util.Optional;
 
 public interface IPlaceService {
 
-    Optional<Place> findPlaceByExternalAPI(String idPlace);
+	Optional<Place> findPlaceByExternalID(String idPlace);
+
+	Place save(Place place);
+
 }

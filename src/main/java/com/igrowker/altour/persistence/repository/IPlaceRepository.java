@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface IPlaceRepository extends JpaRepository<Place, Integer> {
 
-    Optional<Place> findPlaceByExternalID(String externalID);
+    Optional<Place> findByExternalID(String externalID);
 }

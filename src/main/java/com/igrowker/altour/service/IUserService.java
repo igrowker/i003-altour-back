@@ -22,7 +22,7 @@ public interface IUserService {
 
     // USERS- PLACES
     Set<Place> getAllFavorites(Long userId);
-    Set<Place> addFavorite (Long userId,String externalIdPlace);
+    Set<Place> addFavorite (Long userId,String externalIdPlace, String apiKey);
     Set<Place> deleteFavorite(Long userId, String externalIdPlace);
 
     // SECURITY
