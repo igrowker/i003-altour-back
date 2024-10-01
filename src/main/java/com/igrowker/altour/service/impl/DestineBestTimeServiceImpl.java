@@ -1,6 +1,7 @@
 package com.igrowker.altour.service.impl;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,6 +9,7 @@ import com.igrowker.altour.service.IDestineBestTimeService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -52,6 +54,8 @@ public class DestineBestTimeServiceImpl implements IDestineBestTimeService {
 	 * .collect(Collectors.toList())); }
 	 */
 
+	//Cache para mejorar el tiempo de respuesta -> he puesto un math round para lat y lng porque si varia sola por pocas décimas el cache no funcionaria bien ya que no haria match..
+	@Cacheable(value = "venuesCache", key = "T(java.lang.Math).round(#lat * 100) + '-' + T(java.lang.Math).round(#lng * 100) + '-' + #maxDistance + '-' + #preference + '-' + #maxCrowdLevel")
 	@Override
 	public List<Venue> getFilteredVenues(Double lat, Double lng, Integer maxDistance, String preference,
 			Integer maxCrowdLevel, String apiKey) {
@@ -86,6 +90,11 @@ public class DestineBestTimeServiceImpl implements IDestineBestTimeService {
 		                        venue.getVenueLat(), venue.getVenueLng(), venue.getPriceLevel(), venue.getRating(),
 		                        venue.getReviews(), venue.getVenueType(), venue.getDayRaw(), venue.getDayRawWhole(),
 		                        venue.getDayInfo()))
+		                .sorted(Comparator.comparingInt(venue -> 
+	                    (venue.getDayRaw() != null && !venue.getDayRaw().isEmpty()) 
+	                    ? venue.getDayRaw().get(0) 
+	                    : 0
+	                ))
 		                .collect(Collectors.toList());
 		    } else {
 		        return new ArrayList<>();

@@ -2,9 +2,7 @@ package com.igrowker.altour.dtos.external.bestTimeApi;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Venue {
+public class Venue{
 
 	@JsonProperty("venue_id")
 	private String venueId;

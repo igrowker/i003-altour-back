@@ -1,9 +1,7 @@
 package com.igrowker.altour.dtos.external.bestTimeApi;
 
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,8 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DayInfo {
-	
+public class DayInfo{
+
 	@JsonProperty("day_int")
 	private Integer dayInt;
 
