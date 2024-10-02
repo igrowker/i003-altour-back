@@ -18,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.igrowker.altour.dtos.external.bestTimeApi.Venue;
@@ -26,7 +25,6 @@ import com.igrowker.altour.dtos.external.bestTimeApi.VenuesResponse;
 import com.igrowker.altour.dtos.external.bestTimeApiId.VenueInfo;
 import com.igrowker.altour.dtos.external.bestTimeApiId.VenueResponse;
 
-import reactor.core.publisher.Mono;
 
 //works with BEST TIME API
 @Service
@@ -100,6 +98,11 @@ public class DestineBestTimeServiceImpl implements IDestineBestTimeService {
 		        return new ArrayList<>();
 		    }
 	}
+	@Override
+	public List<Venue> getFilteredVenuesWithoutCache(double lat, double lng, int maxDistance, String preference, int maxCrowdLevel, String apiKey) {
+	    return getFilteredVenues(lat, lng, maxDistance, preference, maxCrowdLevel, apiKey);
+	}
+
 
 	public VenueResponse getVenueById(String id, String apiKey) {
 	    String uri = String.format("%s?api_key_public=%s", id, apiKey);

@@ -13,6 +13,7 @@ import com.igrowker.altour.service.impl.DestineInformationHereMapsHereMapsServic
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -90,7 +91,7 @@ public class DestinationFilterController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Lugar no encontrado");
 		}
 
-		List<Venue> filteredVenues = bestTimedestineService.getFilteredVenues(
+		List<Venue> filteredVenues = bestTimedestineService.getFilteredVenuesWithoutCache(
 				venueResponse.getVenueInfo().getVenueLat(), venueResponse.getVenueInfo().getVenueLng(), 10, null, 100,
 				bestTimeApiKey);  // los parámetros son estáticos 10 el radio para que en el filtro encuentre si o si el place concreto 100 busy max para que no lo salte etc.
 
