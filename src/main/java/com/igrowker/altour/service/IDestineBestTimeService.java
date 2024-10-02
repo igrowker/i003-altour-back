@@ -16,6 +16,8 @@ public interface IDestineBestTimeService {
 	 */
 	List<Venue> getFilteredVenues(Double lat, Double lng, Integer maxDistance, String preference, Integer maxCrowdLevel,
 			String apiKey);
+	
+	List<Venue> getFilteredVenuesWithoutCache(double lat, double lng, int maxDistance, String preference, int maxCrowdLevel, String apiKey);
 
 	VenueResponse getVenueById(String id, String apiKey);
 }
