@@ -14,10 +14,12 @@ public interface IDestineBestTimeService {
 	 * Mono<List<Item>> getDestinations(Double lat, Double lng, Integer rad, String
 	 * activity, String hereMapsApiKey);
 	 */
-	List<Venue> getFilteredVenues(Double lat, Double lng, Integer maxDistance, String preference, Integer maxCrowdLevel,
-			String apiKey);
-	
-	List<Venue> getFilteredVenuesWithoutCache(double lat, double lng, int maxDistance, String preference, int maxCrowdLevel, String apiKey);
+
+	List<Venue> getFilteredVenuesWithCache(Double lat, Double lng, Integer maxDistance, String preference,
+			Integer maxCrowdLevel, Integer busyMin, String apiKey);
+
+	List<Venue> getFilteredVenuesWithoutCache(Double lat, Double lng, Integer maxDistance, String preference,
+			Integer maxCrowdLevel, Integer busyMin, String apiKey);
 
 	VenueResponse getVenueById(String id, String apiKey);
 }

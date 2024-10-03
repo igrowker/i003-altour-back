@@ -18,20 +18,13 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 public class CacheConfig {
 
 	@Bean
-	RedisConnectionFactory redisConnectionFactory() {
-		return new LettuceConnectionFactory();
-	}
-	
-	@Bean
 	CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
-		  Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
-	        
-	        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
-	                .entryTtl(Duration.ofMinutes(10))
-	                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer));
+		Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
 
-	        return RedisCacheManager.builder(redisConnectionFactory)
-	                .cacheDefaults(redisCacheConfiguration)
-	                .build();
+		RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
+				.entryTtl(Duration.ofMinutes(10)) // Tiempo de vida de los elementos en caché
+				.serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer));
+
+		return RedisCacheManager.builder(redisConnectionFactory).cacheDefaults(redisCacheConfiguration).build();
 	}
 }
