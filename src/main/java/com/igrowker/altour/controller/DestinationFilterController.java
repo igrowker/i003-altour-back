@@ -86,6 +86,7 @@ public class DestinationFilterController {
 	// TODO reciobir un id y segun el tipo llamar a here o besttime
 	// TODO reciobir un id y segun el tipo llamar a here o besttime
 	// TODO reciobir un id y segun el tipo llamar a here o besttime
+
 	@GetMapping("/{placeId}")
 	public Venue getDestinationInfo(@PathVariable String placeId) {
 		// Obtenemos el venue específico

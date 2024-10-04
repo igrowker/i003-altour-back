@@ -11,6 +11,7 @@ public interface ICustomUserRepository extends JpaRepository<CustomUser, Long> {
     Optional<CustomUser> findByEmail(String email);
 
     boolean existsByEmail(String email);
+    boolean existsByUsername(String username);
     // CustomUser findByEmail(String email);
     Optional<CustomUser> findByUsername(String username);
 }

@@ -28,6 +28,7 @@ public interface IUserService {
     // SECURITY
     AuthResponse login (LoginUserDTO loginUserDTO);
     void validateNewEmail(String email);
+    void validateNewUsername(String username);
     AuthResponse register (RegisterUserDT0 user);
 
     // PREFERENCES

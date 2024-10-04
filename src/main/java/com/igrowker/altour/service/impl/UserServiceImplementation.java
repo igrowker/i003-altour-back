@@ -6,10 +6,7 @@ import com.igrowker.altour.dtos.internal.User.AuthResponse;
 import com.igrowker.altour.dtos.internal.User.LoginUserDTO;
 import com.igrowker.altour.dtos.internal.User.RegisterUserDT0;
 import com.igrowker.altour.dtos.internal.User.UserReadDTO;
-import com.igrowker.altour.exceptions.BadCredentialsException;
-import com.igrowker.altour.exceptions.ForbiddenException;
-import com.igrowker.altour.exceptions.InvalidInputException;
-import com.igrowker.altour.exceptions.NotFoundException;
+import com.igrowker.altour.exceptions.*;
 import com.igrowker.altour.persistence.entity.CustomUser;
 import com.igrowker.altour.persistence.entity.Place;
 import com.igrowker.altour.persistence.entity.VenueType;
@@ -253,6 +250,7 @@ public class UserServiceImplementation implements IUserService {
 	@Override
 	public AuthResponse register(RegisterUserDT0 user) {
 		validateNewEmail(user.getEmail());
+		validateNewUsername(user.getUsername());
 		if (!user.getPassword().equals(user.getConfirmPassword()))
 			throw new InvalidInputException("Passwords no concuerdan!");
 		CustomUser newUser = CustomUser.builder().username(user.getUsername()).email(user.getEmail())
@@ -272,9 +270,11 @@ public class UserServiceImplementation implements IUserService {
 
 	@Override
 	public void validateNewEmail(String email) {
-		if (userRepository.existsByEmail(email))
-			throw new RuntimeException("This Email is already registered!");// todo CAMBIAR MANEJO EXEPCIONES
-																			// PERSONALIZADAS
+		if (userRepository.existsByEmail(email)) throw new ConflictException("This Email is already registered!");
+	}
+	@Override
+	public void validateNewUsername(String username) {
+		if (userRepository.existsByUsername(username)) throw new ConflictException("This Username is already registered!");
 	}
 
 }
