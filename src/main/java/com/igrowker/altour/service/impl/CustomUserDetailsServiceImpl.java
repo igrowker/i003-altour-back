@@ -1,10 +1,7 @@
 package com.igrowker.altour.service.impl;
 
-import com.igrowker.altour.dtos.internal.User.LoginUserDTO;
-import com.igrowker.altour.persistence.entity.CustomUser;
 import com.igrowker.altour.persistence.repository.ICustomUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

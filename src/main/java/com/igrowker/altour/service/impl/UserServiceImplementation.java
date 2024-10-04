@@ -23,6 +23,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -51,6 +52,7 @@ public class UserServiceImplementation implements IUserService {
 
 	// USER CONFIG PERFIL
 	@Override
+	@Transactional
 	public UserReadDTO updateUser(Long userId, UserReadDTO userUpdate) {
 		CustomUser user = getUserById(userId);
 		// NO SE PUEDE CAMBIAR username ni email y si, los permisos ya fueron acceptados
@@ -87,6 +89,7 @@ public class UserServiceImplementation implements IUserService {
 	}
 
 	@Override
+	@Transactional
 	public String deleteUser(LoginUserDTO loginUserDTO) {
 		CustomUser user = getUserByEmail(loginUserDTO.getEmail());
 		if (!passwordEncoder.matches(loginUserDTO.getPassword(), user.getPassword()))
@@ -96,23 +99,27 @@ public class UserServiceImplementation implements IUserService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public UserReadDTO findUserById(Long id) {
 		return userMapper
 				.toUserReadDto(userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found")));
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public CustomUser getUserByEmail(String email) {
 		return userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not found"));
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public CustomUser getUserById(Long id) {
 		return userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
 	}
 
 	// FAVORITES
 	@Override
+	@Transactional
 	public Set<Place> addFavorite(Long userId, String externalIdPlace, String apiKey) {
 		CustomUser user = getUserById(userId);
 
@@ -143,6 +150,7 @@ public class UserServiceImplementation implements IUserService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Set<Place> getAllFavorites(Long userId) {
 		Set<Place> favorites = getUserById(userId).getFavorites();
 
@@ -157,6 +165,7 @@ public class UserServiceImplementation implements IUserService {
 	}
 
 	@Override
+	@Transactional
 	public Set<Place> deleteFavorite(Long userId, String externalIdPlace) {
 		CustomUser user = getUserById(userId);
 
@@ -173,6 +182,7 @@ public class UserServiceImplementation implements IUserService {
 
 	// PREFERENCES
 	@Override
+	@Transactional(readOnly = true)
 	public Set<VenueType> getPreferencesByEmail(String email) {
 		CustomUser user = getUserByEmail(email);
 		Set<VenueType> decryptedPreferences = new HashSet<>();
@@ -194,6 +204,7 @@ public class UserServiceImplementation implements IUserService {
 	}
 
 	@Override
+	@Transactional
 	public Set<VenueType> addPreference(String email, String newPreference) {
 		CustomUser user = getUserByEmail(email);
 		try {
@@ -217,6 +228,7 @@ public class UserServiceImplementation implements IUserService {
 	}
 
 	@Override
+	@Transactional
 	public Set<VenueType> removePreference(String email, String preferenceToRemove) {
 		CustomUser user = getUserByEmail(email);
 		try {
@@ -240,6 +252,7 @@ public class UserServiceImplementation implements IUserService {
 
 	// AUTH
 	@Override
+	@Transactional
 	public AuthResponse login(LoginUserDTO loginUserDTO) {
 		CustomUser dbUser = getUserByEmail(loginUserDTO.getEmail());
 		authenticationManager.authenticate(
@@ -248,6 +261,7 @@ public class UserServiceImplementation implements IUserService {
 	}
 
 	@Override
+	@Transactional
 	public AuthResponse register(RegisterUserDT0 user) {
 		validateNewEmail(user.getEmail());
 		validateNewUsername(user.getUsername());
@@ -269,6 +283,7 @@ public class UserServiceImplementation implements IUserService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public void validateNewEmail(String email) {
 		if (userRepository.existsByEmail(email)) throw new ConflictException("This Email is already registered!");
 	}
