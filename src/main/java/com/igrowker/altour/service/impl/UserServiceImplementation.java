@@ -85,7 +85,7 @@ public class UserServiceImplementation implements IUserService {
 		if (userUpdate.getMaxSearchDistance() > 0)
 			user.setMaxSearchDistance(userUpdate.getMaxSearchDistance());
 		if (userUpdate.getPreferredCrowdLevel() > 0 && userUpdate.getPreferredCrowdLevel() <= 100)
-			user.setMaxSearchDistance(userUpdate.getPreferredCrowdLevel());
+			user.setPreferredCrowdLevel(userUpdate.getPreferredCrowdLevel());
 
 		userRepository.save(user);
 		return userMapper.toUserReadDto(user);
