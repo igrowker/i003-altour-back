@@ -1,5 +1,6 @@
 package com.igrowker.altour.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import com.igrowker.altour.dtos.external.bestTimeApiId.VenueResponse;
 import com.igrowker.altour.persistence.entity.CustomUser;
 import com.igrowker.altour.persistence.repository.ICustomUserRepository;
 
+import com.igrowker.altour.service.IDestineAuditService;
 import com.igrowker.altour.service.impl.DestineInformationHereMapsHereMapsServiceImpl;
 
 import io.lettuce.core.RedisConnectionException;
@@ -30,6 +32,9 @@ import com.igrowker.altour.service.impl.DestineBestTimeServiceImpl;
 public class DestinationFilterController {
 	@Autowired
 	private DestineInformationHereMapsHereMapsServiceImpl hereMapsDestineService;
+
+	@Autowired
+	private IDestineAuditService destineAuditService;
 
 	@Autowired
 	private DestineBestTimeServiceImpl bestTimedestineService;
@@ -86,6 +91,7 @@ public class DestinationFilterController {
 	// TODO reciobir un id y segun el tipo llamar a here o besttime
 	// TODO reciobir un id y segun el tipo llamar a here o besttime
 	// TODO reciobir un id y segun el tipo llamar a here o besttime
+
 	@GetMapping("/{placeId}")
 	public Venue getDestinationInfo(@PathVariable String placeId) {
 		// Obtenemos el venue específico
@@ -117,9 +123,11 @@ public class DestinationFilterController {
 	private List<Venue> getFilteredVenues(Double lat, Double lng, Integer maxDistance, String preference,
 			Integer maxCrowdLevel, Integer busyMin) {
 		try {
-			return bestTimedestineService.getFilteredVenuesWithCache(lat, lng, maxDistance, preference, maxCrowdLevel,
-					busyMin, bestTimeApiKey);
+			List<Venue> list = bestTimedestineService.getFilteredVenuesWithCache(lat, lng, maxDistance, preference, maxCrowdLevel,busyMin, bestTimeApiKey);
+			destineAuditService.saveDestine(new Date(),lat, lng, maxDistance, preference, maxCrowdLevel, busyMin, true);
+			return list;
 		} catch (RedisConnectionFailureException | RedisConnectionException | RedisSystemException | QueryTimeoutException e) {
+			destineAuditService.saveDestine(new Date(),lat, lng, maxDistance, preference, maxCrowdLevel, busyMin, false);
 			System.err.println("Error de conexión a Redis: " + e.getMessage());
 
 			return bestTimedestineService.getFilteredVenuesWithoutCache(lat, lng, maxDistance, preference,
