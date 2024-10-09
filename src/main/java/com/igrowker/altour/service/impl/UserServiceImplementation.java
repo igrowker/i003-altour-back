@@ -61,8 +61,11 @@ public class UserServiceImplementation implements IUserService {
 			throw new ForbiddenException("NO esta permitido cambiar username");
 		if (userUpdate.getEmail() != null && !userUpdate.getEmail().equals(user.getEmail()))
 			throw new ForbiddenException("NO esta permitido cambiar email");
-		if (!userUpdate.getAcceptedTOS() && user.getAcceptedTOS())
-			throw new ForbiddenException("Ya no puedes retirar los permisos de uso, pero puedes eliminar la cuenta");
+
+		if (userUpdate.getAcceptedTOS() != null && !userUpdate.getAcceptedTOS() && user.getAcceptedTOS()){
+				throw new ForbiddenException("Ya no puedes retirar los permisos de uso, pero puedes eliminar la cuenta");
+		}
+
 		// PREFERENCES y FAVORITES debes ser maenjados a traves de sus respectivos
 		// endpoints
 		if (!userUpdate.getFavorites().isEmpty())
@@ -73,15 +76,15 @@ public class UserServiceImplementation implements IUserService {
 		// modificar a traves de sus endpoints");
 
 		// Casos permitidos
-		if (!userUpdate.getPassword().isEmpty()
+		if (userUpdate.getPassword() != null && !userUpdate.getPassword().isEmpty()
 				&& !passwordEncoder.matches(userUpdate.getPassword(), user.getPassword())) {
 			user.setPassword(passwordEncoder.encode(userUpdate.getPassword()));
 		}
-		if (userUpdate.getAcceptedTOS())
+		if (userUpdate.getAcceptedTOS() != null && userUpdate.getAcceptedTOS())
 			user.setAcceptedTOS(true);
-		if (userUpdate.getMaxSearchDistance() > 0)
+		if (userUpdate.getMaxSearchDistance() != null && userUpdate.getMaxSearchDistance() > 0)
 			user.setMaxSearchDistance(userUpdate.getMaxSearchDistance());
-		if (userUpdate.getPreferredCrowdLevel() > 0 && userUpdate.getPreferredCrowdLevel() <= 100)
+		if (userUpdate.getPreferredCrowdLevel() != null && userUpdate.getPreferredCrowdLevel() > 0 && userUpdate.getPreferredCrowdLevel() <= 100)
 			user.setPreferredCrowdLevel(userUpdate.getPreferredCrowdLevel());
 
 		userRepository.save(user);
