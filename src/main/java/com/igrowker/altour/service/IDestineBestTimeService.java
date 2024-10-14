@@ -9,11 +9,6 @@ import reactor.core.publisher.Mono;
 
 // works with BEST TIME API
 public interface IDestineBestTimeService {
-	/*
-	 * TODO ESTO LO DEJO COMENTADO HASTA VERIFICAR SI LO USAREMOS O NO...
-	 * Mono<List<Item>> getDestinations(Double lat, Double lng, Integer rad, String
-	 * activity, String hereMapsApiKey);
-	 */
 
 	List<Venue> getFilteredVenuesWithCache(Double lat, Double lng, Integer maxDistance, String preference,
 			Integer maxCrowdLevel, Integer busyMin, String apiKey);

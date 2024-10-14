@@ -71,9 +71,6 @@ public class UserServiceImplementation implements IUserService {
 		if (!userUpdate.getFavorites().isEmpty())
 			throw new ForbiddenException(
 					"Los favoritos del usuario solo se pueden modificar a traves de sus endpoints");
-		// todo => if(! userUpdate.getVisitedDestinations().isEmpty() ) throw new
-		// ForbiddenException("Los Lugares visitados del usuario solo se pueden
-		// modificar a traves de sus endpoints");
 
 		// Casos permitidos
 		if (userUpdate.getPassword() != null && !userUpdate.getPassword().isEmpty()
@@ -272,12 +269,8 @@ public class UserServiceImplementation implements IUserService {
 			throw new InvalidInputException("Passwords no concuerdan!");
 		CustomUser newUser = CustomUser.builder().username(user.getUsername()).email(user.getEmail())
 				.password(passwordEncoder.encode(user.getPassword())).acceptedTOS(user.getAcceptedTOS())
-				.favorites(new HashSet<>()).maxSearchDistance(1000) // todo valor por defecto, front que lo modifique en
-																	// un update
-				.preferences(new HashSet<>()).preferredCrowdLevel(80) // todo Nivel de afluencia preferido de 0 a 100 =>
-																		// Avisar a front que TIENE QUE SER MAYOR A 10 y
-																		// menor a 100
-				// .visitedDestinations(new HashSet<>())
+				.favorites(new HashSet<>()).maxSearchDistance(1000)
+				.preferences(new HashSet<>()).preferredCrowdLevel(80)
 				.build();
 		userRepository.save(newUser);
 		authenticationManager

@@ -17,11 +17,6 @@ import java.util.stream.Collectors;
 @Service
 public class DestineInformationHereMapsHereMapsServiceImpl implements IDestineInformationHereMapsService {
 
-	/*
-	 * Gestiona la obtención de información detallada sobre puntos de interés
-	 * turístico, incluyendo horarios, precios y descripciones.
-	 */
-
 	private final WebClient webClient;
 
 	@Value("${here_maps.api.key}")

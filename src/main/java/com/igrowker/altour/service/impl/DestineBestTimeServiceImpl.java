@@ -5,14 +5,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.igrowker.altour.exceptions.NotFoundException;
 import com.igrowker.altour.service.IDestineBestTimeService;
-
-import io.lettuce.core.RedisConnectionException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -38,22 +35,6 @@ public class DestineBestTimeServiceImpl implements IDestineBestTimeService {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	/*
-	 * TODO ESTO LO DEJO COMENTADO HASTA VERIFICAR SI LO USAREMOS O NO...
-	 * 
-	 * @Override public Mono<List<Item>> getDestinations(Double lat, Double lng,
-	 * Integer rad, String activity, String hereMapsApiKey) { String uri =
-	 * String.format("/discover?in=circle:%s,%s;r=%d&q=%s&apiKey=%s", lat, lng, rad,
-	 * activity, hereMapsApiKey);
-	 * 
-	 * // todo pendiente de obtener Description(), Price(), OpeningHours(),
-	 * DestinationType().. , revisar manejo de nulos return
-	 * hereMapsWebClient.get().uri(uri).retrieve().bodyToMono(Items.class)
-	 * .map(items -> items.getItems().stream().map( i -> new Item(i.getTitle(),
-	 * i.getDistance(), i.getPosition(), i.getAddress(), i.getContacts()))
-	 * .collect(Collectors.toList())); }
-	 */
-
 	private List<Venue> getVenues(Double lat, Double lng, Integer maxDistance, String preference, Integer maxCrowdLevel,
 			Integer busyMin, String apiKey) {
 		String latStr = String.valueOf(lat).replace(",", ".");
@@ -68,7 +49,6 @@ public class DestineBestTimeServiceImpl implements IDestineBestTimeService {
 		}
 
 		String uri = uriBuilder.toString();
-		System.out.println("Full URL: " + uri);
 
 		ResponseEntity<VenuesResponse> response = restTemplate.exchange(uri, HttpMethod.GET,
 				new HttpEntity<>(new HttpHeaders()), VenuesResponse.class);
@@ -130,7 +110,7 @@ public class DestineBestTimeServiceImpl implements IDestineBestTimeService {
 						.venueForecasted(venueResponse.isVenueForecasted())
 						.epochAnalysis(venueResponse.getEpochAnalysis()).status(venueResponse.getStatus()).build();
 			} else {
-				throw new RuntimeException("No se encontraron datos para el venue con ID: " + id);
+				throw new NotFoundException("No se encontraron datos para el venue con ID: " + id);
 			}
 		} catch (RestClientException e) {
 			System.err.println("Error fetching venue by ID: " + e.getMessage());
