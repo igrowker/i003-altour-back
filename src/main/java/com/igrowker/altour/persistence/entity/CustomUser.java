@@ -1,13 +1,10 @@
 package com.igrowker.altour.persistence.entity;
 
-import com.igrowker.altour.dtos.external.bestTimeApi.EnumVenueTypes;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.math.BigDecimal;
 import java.util.*;
 
 
@@ -31,11 +28,9 @@ public class CustomUser implements UserDetails {
 	@Column(nullable = false)
 	private String password;
 
-	// @Column(nullable = false)
 	@ColumnDefault(value = "false")
 	private Boolean acceptedTOS;
 
-	// Distancia máxima de búsqueda
 	@Column(name = "max_search_distance", nullable = false)
 	private Integer maxSearchDistance;
 
@@ -67,10 +62,6 @@ public class CustomUser implements UserDetails {
 		return password;
 	}
 
-	// TODO VER FORMAS DE TENER SOLO UNA LISTA Y UN ESTADO, TIPO VISITADOS, PENDIENTES FAVORITOS ECTS..
-	// TODO VER FORMAS DE TENER SOLO UNA LISTA Y UN ESTADO, TIPO VISITADOS, PENDIENTES FAVORITOS ECTS..
-	// TODO VER FORMAS DE TENER SOLO UNA LISTA Y UN ESTADO, TIPO VISITADOS, PENDIENTES FAVORITOS ECTS..
-	// TODO VER FORMAS DE TENER SOLO UNA LISTA Y UN ESTADO, TIPO VISITADOS, PENDIENTES FAVORITOS ECTS..
 	// TODO VER FORMAS DE TENER SOLO UNA LISTA Y UN ESTADO, TIPO VISITADOS, PENDIENTES FAVORITOS ECTS..
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "user_places",

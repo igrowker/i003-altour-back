@@ -50,20 +50,6 @@ public class DestinationFilterController {
 
 	@Value("${best_time.api.pub.key}")
 	private String bestTimeApiPubKey;
-	/*
-	 * TODO ESTO LO DEJO COMENTADO HASTA VERIFICAR SI LO USAREMOS O NO...
-	 * 
-	 * @GetMapping("/filter") public Mono<List<Item>> filter(@RequestParam Double
-	 * lat,
-	 * 
-	 * @RequestParam Double lng,
-	 * 
-	 * @RequestParam Integer rad,
-	 * 
-	 * @RequestParam String activity) { return
-	 * destinationFilterService.getDestinations(lat, lng, rad, activity,
-	 * hereMapsApiKey); }
-	 */
 
 	@GetMapping("/")
 	public List<Venue> filterBestTime(@RequestParam Double lat, @RequestParam Double lng,
@@ -74,9 +60,7 @@ public class DestinationFilterController {
 		Integer crowdLevel = maxCrowdLevel != null ? maxCrowdLevel : 80;
 		Integer distance = maxDistance != null ? maxDistance : 1000;
 
-		if (authentication == null) {
-			// todo esta logica sera seguida por un usuario que no esta autenticado.. ya que
-			// front muestra mapas para logueados y no logueados
+		if (authentication == null) { // front muestra mapas para logueados y no logueados
 			return getFilteredVenues(lat, lng, distance, preference, crowdLevel, busyMin);
 		}
 
@@ -87,10 +71,6 @@ public class DestinationFilterController {
 		return getFilteredVenues(lat, lng, distance, preference, crowdLevel, busyMin);
 	}
 
-	// TODO reciobir un id y segun el tipo llamar a here o besttime
-	// TODO reciobir un id y segun el tipo llamar a here o besttime
-	// TODO reciobir un id y segun el tipo llamar a here o besttime
-	// TODO reciobir un id y segun el tipo llamar a here o besttime
 
 	@GetMapping("/{placeId}")
 	public Venue getDestinationInfo(@PathVariable String placeId) {
