@@ -2,20 +2,18 @@ package com.igrowker.altour.dtos.internal.User;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RegistserUserDT0 {
+public class RegisterUserDT0 {
     @NotNull(message = "Username no puede ser nulo")
     @Size(min=2, max=30, message = "Username debe tener entre 2 y 30 caracteres")
     private String username;
@@ -28,11 +26,11 @@ public class RegistserUserDT0 {
     @Size(min=2, max=30, message = "Contraseña debe tener entre 2 y 30 caracteres")
     private String password;
 
-    @NotNull(message = "Actividad no puede ser nula")
-    @Size(min=2, max=30, message = "Actividad debe tener entre 2 y 30 caracteres")
-    private String activity; // TODO VERIFICAR SI ENUM CON LISTA DE ACT O STRING
+    @NotNull(message = "Contraseña de confirmacion no puede ser nula")
+    @Size(min=2, max=30, message = "Contraseña de confirmacion debe tener entre 2 y 30 caracteres")
+    private String confirmPassword;
 
-    @NotNull(message = "Distancia no puede ser nula")
-    @Positive(message = "Distancia debe ser mayor a cero")
-    private BigDecimal maxDistance;
+    @NotNull(message = "Debes aceptar o declinar los terminos de servicio de la aplicacion")
+    private Boolean acceptedTOS;
+
 }
